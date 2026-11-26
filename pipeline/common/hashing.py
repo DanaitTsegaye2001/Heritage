@@ -19,3 +19,11 @@ def file_hash(path: Path) -> str:
         for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def write_if_changed(path: Path, text: str) -> bool:
+    """Write only when content differs, so no-op runs leave mtimes untouched."""
+    if path.is_file() and path.read_text(encoding="utf-8") == text:
+        return False
+    path.write_text(text, encoding="utf-8")
+    return True

@@ -40,7 +40,7 @@ def run(ctx: Ctx) -> None:
 
         run_model_cached(
             ctx, stage="music", shot_id=None, cfg=cfg, inputs=inputs, out=out_dir / f"{cue['id']}.wav",
-            seed=cue["seed"],
+            seed=cue["seed"], label=cue["id"], extra={"cue_id": cue["id"]},
             call=lambda tmp, cue=cue, dur=dur: provider.music(cfg=cfg, prompt=cue["prompt"], duration_sec=dur,
                                                              seed=cue["seed"], out=tmp),
             postprocess=fit)

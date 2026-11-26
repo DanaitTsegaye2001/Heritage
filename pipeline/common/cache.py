@@ -83,7 +83,8 @@ def cached_local(out: Path, inputs: dict[str, Any], build: Callable[[Path], dict
 def run_model_cached(ctx: Any, *, stage: str, shot_id: str | None, cfg: dict[str, Any],
                      inputs: dict[str, Any], out: Path, seed: int | None,
                      call: Callable[[Path], Any],
-                     postprocess: Callable[[Path], dict[str, Any]] | None = None) -> dict[str, Any]:
+                     postprocess: Callable[[Path], dict[str, Any]] | None = None,
+                     label: str | None = None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
     """Cache lookup -> (retrying) model call -> store -> one runs.jsonl line.
 
     `call(tmp)` must write the artifact to `tmp` and return a ProviderResult.
@@ -91,14 +92,15 @@ def run_model_cached(ctx: Any, *, stage: str, shot_id: str | None, cfg: dict[str
     """
     h = stable_hash(inputs)
     params = cfg.get("params", {})
-    label = f"{stage}:{shot_id or '-'}"
+    label = f"{stage}:{label or shot_id or '-'}"
+    extra = extra or {}
     common = dict(stage=stage, shot_id=shot_id, provider=cfg["provider"], model=cfg["model"],
                   parameters=params, seed=seed, input_hash=h)
 
     if not ctx.force and (meta := lookup(out, h)):
         log_model_call(ctx, **common, cache_hit=True, latency_sec=0.0, gpu_minutes=0.0,
                        list_price_equivalent_usd=0.0, status="cached", attempts=0,
-                       extra={"fallback": meta["fallback"]} if meta.get("fallback") else None)
+                       extra={**extra, **({"fallback": meta["fallback"]} if meta.get("fallback") else {})})
         print(f"  = {label} cached")
         return meta
 
@@ -119,13 +121,13 @@ def run_model_cached(ctx: Any, *, stage: str, shot_id: str | None, cfg: dict[str
         log_model_call(ctx, **common, cache_hit=False, latency_sec=latency,
                        gpu_minutes=None if gpu_s is None else gpu_s / 60,
                        list_price_equivalent_usd=price_usd(cfg.get("pricing"), gpu_s),
-                       status="ok", attempts=attempts)
+                       status="ok", attempts=attempts, extra=extra)
         print(f"  + {label} generated in {latency:.1f}s")
         return meta
     except (PermanentError, TransientError) as e:
         log_model_call(ctx, **common, cache_hit=False, latency_sec=time.monotonic() - t0,
                        gpu_minutes=None, list_price_equivalent_usd=None,
-                       status=type(e).__name__, attempts=attempts, error=str(e))
+                       status=type(e).__name__, attempts=attempts, error=str(e), extra=extra)
         raise
     finally:
         tmp.unlink(missing_ok=True)

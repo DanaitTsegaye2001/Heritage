@@ -16,14 +16,14 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 from pathlib import Path
 from typing import Any
 
 from .common.cache import cached_local, require_meta
 from .common.cli import stage_main
 from .common.context import Ctx
-from .common.media import BITEXACT, SAMPLE_RATE, X264, check_ffmpeg, ffmpeg, loudness
+from .common.hashing import write_if_changed
+from .common.media import BITEXACT, SAMPLE_RATE, X264, X264_FAST, check_ffmpeg, ffmpeg, loudness
 from .common.storyboard import cue_spans, timeline, total_duration
 from .common.text_render import badge_png, end_card_png, subtitle_png
 
@@ -138,8 +138,8 @@ def write_srt(cues: list[dict], path: Path) -> None:
     def ts(x: float) -> str:
         ms = int(round(x * 1000))
         return f"{ms // 3600000:02}:{ms // 60000 % 60:02}:{ms // 1000 % 60:02},{ms % 1000:03}"
-    path.write_text("".join(f"{i}\n{ts(c['start'])} --> {ts(c['end'])}\n{c['text']}\n\n"
-                            for i, c in enumerate(cues, 1)), encoding="utf-8")
+    write_if_changed(path, "".join(f"{i}\n{ts(c['start'])} --> {ts(c['end'])}\n{c['text']}\n\n"
+                            for i, c in enumerate(cues, 1)))
 
 
 # ---------------------------------------------------------------- video
@@ -155,7 +155,7 @@ def normalise_clip(ctx: Ctx, shot: dict, w: int, h: int, tag: str) -> dict:
         vf = (f"fps={fps},scale={w}:{h}:force_original_aspect_ratio=increase,"
               f"crop={w}:{h}:x='(iw-ow)*{focus}':y='(ih-oh)/2',setsar=1,format=yuv420p,"
               f"tpad=stop_mode=clone:stop_duration={dur},trim=duration={dur},setpts=PTS-STARTPTS")
-        ffmpeg("-i", src, "-vf", vf, "-an", *X264, "-crf", str(max(10, inputs["crf"] - 4)), *BITEXACT, "-f", "mp4", tmp)
+        ffmpeg("-i", src, "-vf", vf, "-an", *X264_FAST, "-crf", str(max(10, inputs["crf"] - 4)), *BITEXACT, "-f", "mp4", tmp)
 
     meta, _ = cached_local(ctx.stage_dir("assemble", "clips", tag) / f"{shot['id']}.mp4", inputs, build, ctx.force)
     return meta
@@ -171,7 +171,7 @@ def end_card_clip(ctx: Ctx, w: int, h: int, tag: str) -> dict:
         try:
             end_card_png(png, w=w, h=h, title=ec["title"], statement=ec["ai_statement"], credits=ec.get("credits", []))
             ffmpeg("-loop", "1", "-i", png, "-t", str(ec["duration_sec"]), "-r", str(fps),
-                   "-vf", "fade=t=in:d=0.6,setsar=1,format=yuv420p", *X264, "-crf", "14", *BITEXACT, "-f", "mp4", tmp)
+                   "-vf", "fade=t=in:d=0.6,setsar=1,format=yuv420p", *X264_FAST, "-crf", "14", *BITEXACT, "-f", "mp4", tmp)
         finally:
             png.unlink(missing_ok=True)
 
@@ -249,10 +249,10 @@ def run(ctx: Ctx) -> None:
         m = loudness(p, ctx.sb["audio"]["loudness"])
         report["exports"][p.name] = {"measured_lufs": m["input_i"], "measured_true_peak_db": m["input_tp"],
                                      "measured_lra": m["input_lra"], "bytes": p.stat().st_size}
-    (final_dir / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    write_if_changed(final_dir / "report.json", json.dumps(report, indent=2))
     for name, r in report["exports"].items():
         print(f"  ✓ {name}: {r['measured_lufs']:.1f} LUFS, {r['measured_true_peak_db']:.1f} dBTP (measured)")
-    shutil.copyfile(ctx.storyboard_path, final_dir / "storyboard.snapshot.json")
+    write_if_changed(final_dir / "storyboard.snapshot.json", ctx.storyboard_path.read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

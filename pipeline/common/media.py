@@ -13,6 +13,8 @@ from typing import Any, Sequence
 # (byte-identical across machines also requires the same ffmpeg/x264 build).
 BITEXACT = ["-map_metadata", "-1", "-fflags", "+bitexact", "-flags:v", "+bitexact", "-flags:a", "+bitexact"]
 X264 = ["-c:v", "libx264", "-preset", "medium", "-pix_fmt", "yuv420p", "-threads", "4"]
+# Intermediates: faster preset at lower CRF (higher quality) — they are re-encoded once more.
+X264_FAST = ["-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p", "-threads", "4"]
 SAMPLE_RATE = 48000
 
 REQUIRED_FILTERS = ["zoompan", "overlay", "concat", "sidechaincompress", "loudnorm", "amix", "adelay", "afade", "apad"]

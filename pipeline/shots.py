@@ -18,7 +18,7 @@ from .common.cache import lookup, require_meta, run_model_cached, store, tmp_pat
 from .common.cli import stage_main
 from .common.context import Ctx
 from .common.hashing import stable_hash
-from .common.media import BITEXACT, X264, ffmpeg
+from .common.media import BITEXACT, X264_FAST, ffmpeg
 from .common.retry import ModelUnavailable, PermanentError, TransientError
 from .common.storyboard import model_key
 from .providers import get_provider
@@ -41,7 +41,7 @@ def ken_burns(image: Path, out: Path, *, duration: float, fps: int, size: tuple[
           f"zoompan=z='{z}':x='(iw-iw/zoom)*{cx}':y='(ih-ih/zoom)*{cy}':d={frames}:s={w}x{h}:fps={fps},"
           f"setsar=1,format=yuv420p")
     ffmpeg("-loop", "1", "-i", image, "-vf", vf, "-frames:v", str(frames), "-r", str(fps),
-           *X264, "-crf", str(crf), *BITEXACT, "-an", "-f", "mp4", out)
+           *X264_FAST, "-crf", str(crf), *BITEXACT, "-an", "-f", "mp4", out)
 
 
 def run(ctx: Ctx) -> None:

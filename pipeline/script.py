@@ -9,6 +9,7 @@ import json
 
 from .common.cli import stage_main
 from .common.context import Ctx
+from .common.hashing import write_if_changed
 from .common.storyboard import WORDS_PER_SEC, cue_spans, timeline, total_duration
 
 
@@ -18,12 +19,11 @@ def run(ctx: Ctx) -> None:
     tl = timeline(sb)
     words = sum(r["words"] for r in tl)
 
-    (out / "timeline.json").write_text(json.dumps(
+    write_if_changed(out / "timeline.json", json.dumps(
         {"shots": tl, "music_cues": cue_spans(sb), "end_card_start": tl[-1]["end"],
-         "total_sec": total_duration(sb), "narration_words": words}, indent=2), encoding="utf-8")
+         "total_sec": total_duration(sb), "narration_words": words}, indent=2))
 
-    (out / "narration.txt").write_text(
-        "\n".join(s["narration"] for s in sb["shots"] if s["narration"]) + "\n", encoding="utf-8")
+    write_if_changed(out / "narration.txt", "\n".join(s["narration"] for s in sb["shots"] if s["narration"]) + "\n")
 
     md = [f"# {sb['title']}", "", f"_{sb['logline']}_", "",
           f"**Runtime:** {total_duration(sb):.1f}s (incl. {sb['end_card']['duration_sec']}s end card) · "
@@ -32,7 +32,7 @@ def run(ctx: Ctx) -> None:
     for s, r in zip(sb["shots"], tl):
         md.append(f"| {s['id']} | {r['start']:.1f}–{r['end']:.1f} | {s['duration_sec']}s | {s['music_cue'] or '—'} "
                   f"| {s['purpose']} | {s['narration'] or '_(silent)_'} |")
-    (out / "script.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    write_if_changed(out / "script.md", "\n".join(md) + "\n")
     print(f"  ✓ {len(tl)} shots, {total_duration(sb):.1f}s, {words} words → {out.relative_to(ctx.root) if out.is_relative_to(ctx.root) else out}")
 
 
