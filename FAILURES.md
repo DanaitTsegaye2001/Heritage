@@ -53,7 +53,27 @@ Entry format:
 - Workaround: music stays on `stub` until billing is on, or until a licensed track is used. Video uses the Ken Burns fallback. Cloudflare Workers AI covers images (`@cf/leonardo/lucid-origin`) and narration (`@cf/deepgram/aura-2-en`); both verified live (1920×1080 image in 11.9 s; 5.09 s of speech in 4.4 s).
 - Prevention: probe each provider with one call before switching the storyboard to it.
 
-### F-101 — [TODO]
+### F-101 — Cloudflare Workers AI daily allocation used up after 2 images
+- When: 2026-11-26 ~18:20 EAT, probing FLUX.2 klein after two `lucid-origin` test images (1920×1080) and two `aura-2-en` clips.
+- Symptom: `HTTP 429 … code 4006: you have used up your daily free allocation of 10,000 neurons`.
+- Cause: `@cf/leonardo/lucid-origin` at 1920×1080 costs far more neurons per image than the distilled FLUX models the brief budgets for (50–170 images/day).
+- Workaround: the Cloudflare adapter now raises PermanentError on code 4006 instead of retrying a quota that resets at 00:00 UTC (03:00 EAT). Keyframes move to FLUX.2 klein-4B on a Kaggle GPU (notebook + import provider).
+- Prevention: draft at 1024 px with a distilled model (klein/schnell); check the neuron cost of one call before batching.
+
+### F-102 — Gemini image models: free-tier quota 0
+- When: 2026-11-26 ~18:30 EAT.
+- Symptom: `gemini-2.5-flash-image` → `429 … generate_content_free_tier_requests, limit: 0`. Adding `imageConfig` to the request returned an empty 404.
+- Cause: Nano Banana image models need billing (as the brief says).
+- Workaround: see F-101.
+
+### F-103 — Gemini TTS: 10 requests/day per model on the free tier
+- When: 2026-11-26 ~18:50 EAT, during the narration-pace experiment (EXPERIMENTS E-06).
+- Symptom: `429 … GenerateRequestsPerDayPerProjectPerModel-FreeTier, limit: 10, model: gemini-3.8-flash-tts … retry in 16h25m`.
+- Cause: the free tier allows 10 TTS requests per model per day. 13 narration calls plus 4 style probes used them up.
+- Workaround: the quota is per model, so `gemini-3.8-flash-lite-tts` still works (verified: 2.02 w/s, 5.1 s latency). The Gemini adapter fails fast on `limit: 0` / per-day messages but still retries per-minute limits. Plan: iterate the radio cut with free local TTS (`macos_say`) and spend Gemini requests only on locked lines (one per shot, plus few retakes).
+- Prevention: count TTS calls in `runs.jsonl` before regenerating everything; editing one line costs one request thanks to the cache.
+
+### F-104 — [TODO]
 - When / run_id / stage / shot:
 - Symptom:
 - Cause:

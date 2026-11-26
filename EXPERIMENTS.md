@@ -50,11 +50,22 @@ Entry format:
 - Measure: `outputs/final/report.json` measured_lufs / measured_true_peak_db.
 - Result: [PENDING] · Decision: [PENDING]
 
-### E-06 — Narration pace
-- Hypothesis: `voice.speed` 0.95 improves comprehension for first-time viewers.
-- Change: [PENDING]
-- Measure: narration-overflow warnings, user-test Q3.
-- Result: [PENDING] · Decision: [PENDING]
+### E-06 — Narration pace vs Gemini TTS style instruction ✅ measured
+- Date / commit / run_id(s): 2026-11-26, after commit 9061a45 (direct provider calls, same text, voice Kore).
+- Hypothesis: the style instruction "warmly and unhurried" fits the tone without hurting timing.
+- Change: style instruction varied on s01's 13-word line.
+- Measure: audio duration → words/second; overflow against the 6.6 s available in s01.
+- Result:
+
+  | Model | Style instruction | Duration | Pace |
+  |---|---|---|---|
+  | gemini-3.8-flash-tts | "Read warmly and unhurried, like a grandchild remembering" | 11.91 s | 1.09 w/s |
+  | gemini-3.8-flash-tts | "Read warmly at a natural conversational pace" | 9.52 s | 1.37 w/s |
+  | gemini-3.8-flash-tts | *(none)* | 5.78 s | 2.25 w/s |
+  | gemini-3.8-flash-lite-tts | *(none)* | 6.43 s | 2.02 w/s |
+
+  With the "unhurried" style, all 10 shots overflowed (9.7–13.2 s of audio against 6.6–8.1 s slots, 1.13–1.66 w/s). At that pace 158 words need ~117 s, which can't fit a 90 s film.
+- Decision: drop the pacing words from the style. Pacing words change speed far more than tone. Keep lines at ≤ 2 w/s × (shot − 0.4 s), or lengthen shots. Follow-up: listen for whether "warmly" alone keeps the tone (pending, TTS quota F-103).
 
 ### E-07 — Subtitle chunk size
 - Hypothesis: `max_words_per_cue` 5 reads better on 9:16 than 7.

@@ -12,6 +12,18 @@ make costs                                  # all runs, console table
 
 Fill `models.<kind>.pricing` in `storyboard.json` from the provider's pricing page, and record `source` + `checked_on`. List prices change; the log keeps whatever was configured at the time of each call.
 
+## Free-tier limits actually found (2026-11-26)
+
+| Service / model | Limit hit | Evidence |
+|---|---|---|
+| Cloudflare Workers AI (`lucid-origin` 1920×1080, `aura-2-en`) | 10,000 neurons/day, used up after 2 images + 2 short TTS clips | FAILURES F-101 |
+| Gemini `gemini-3.8-flash-tts` | 10 requests/day/model | FAILURES F-103 |
+| Gemini `gemini-3.8-flash-lite-tts` | separate 10/day quota (works) | FAILURES F-103 |
+| Gemini image (`gemini-2.5-flash-image`) | 0 (billing needed) | FAILURES F-102 |
+| Gemini Lyria (`lyria-3-clip-preview`) | 0 (billing needed) | FAILURES F-100 |
+
+Measured latencies (single calls, from `runs.jsonl` / direct probes): lucid-origin 1920×1080 image 10.1–11.9 s; aura-2-en 4.3–4.4 s; gemini-3.8-flash-tts 5.0–7.2 s per line; flash-lite-tts 5.1 s.
+
 ## Pricing configured
 
 | Kind | Provider / model | usd_per_call | usd_per_gpu_second | Source | Checked on |
