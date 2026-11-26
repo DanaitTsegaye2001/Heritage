@@ -1,0 +1,20 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Generated media (reproducible from storyboard.json); keep the folder
+outputs/*
+!outputs/.gitkeep
+!outputs/README.md
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
