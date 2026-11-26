@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/heritage-short/storyboard.schema.json",
+  "title": "The Heritage Short — storyboard contract",
+  "description": "Single source of truth for every pipeline stage. Structural rules live here; cross-field rules (total duration 60–90 s, 130–220 narration words, contiguous music cues, reference files exist) are enforced in pipeline/common/storyboard.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "title", "logline", "audience", "intent", "render", "models", "style", "voice", "audio", "music_cues", "shots", "end_card", "subtitles", "ai_disclosure"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "notes": { "$ref": "#/$defs/notes" },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "logline": { "type": "string", "minLength": 10, "maxLength": 400 },
+    "audience": { "type": "string", "minLength": 3, "maxLength": 400 },
+    "intent": { "type": "string", "minLength": 3, "maxLength": 600 },
+
+    "render": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fps", "keyframe_resolution", "master_resolution", "exports"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "fps": { "type": "integer", "enum": [24, 25, 30] },
+        "keyframe_resolution": { "$ref": "#/$defs/resolution" },
+        "master_resolution": { "$ref": "#/$defs/resolution" },
+        "exports": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["aspect", "resolution"],
+            "properties": {
+              "aspect": { "type": "string", "enum": ["16:9", "9:16"] },
+              "resolution": { "$ref": "#/$defs/resolution" }
+            }
+          }
+        },
+        "video_crf": { "type": "integer", "minimum": 10, "maximum": 30, "default": 18 }
+      }
+    },
+
+    "models": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image", "video", "tts", "music"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "image": { "$ref": "#/$defs/model" },
+        "video": { "$ref": "#/$defs/model" },
+        "tts": { "$ref": "#/$defs/model" },
+        "music": { "$ref": "#/$defs/model" }
+      }
+    },
+
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_prompt_suffix", "negative_prompt"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "image_prompt_suffix": { "type": "string", "maxLength": 600 },
+        "negative_prompt": { "type": "string", "maxLength": 600 }
+      }
+    },
+
+    "voice": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["voice_id"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "voice_id": { "type": "string", "minLength": 1 },
+        "speed": { "type": "number", "minimum": 0.5, "maximum": 2.0, "default": 1.0 },
+        "seed": { "$ref": "#/$defs/seed" }
+      }
+    },
+
+    "audio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["narration_lead_sec", "ducking", "loudness"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "narration_lead_sec": { "type": "number", "minimum": 0, "maximum": 2 },
+        "music_fade_in_sec": { "type": "number", "minimum": 0, "maximum": 5, "default": 1.0 },
+        "music_fade_out_sec": { "type": "number", "minimum": 0, "maximum": 8, "default": 2.0 },
+        "ducking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["threshold", "ratio", "attack_ms", "release_ms"],
+          "properties": {
+            "threshold": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+            "ratio": { "type": "number", "minimum": 1, "maximum": 20 },
+            "attack_ms": { "type": "number", "minimum": 0.01, "maximum": 2000 },
+            "release_ms": { "type": "number", "minimum": 0.01, "maximum": 9000 }
+          }
+        },
+        "loudness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["integrated_lufs", "true_peak_db", "lra"],
+          "properties": {
+            "integrated_lufs": { "type": "number", "minimum": -24, "maximum": -10 },
+            "true_peak_db": { "type": "number", "minimum": -9, "maximum": 0 },
+            "lra": { "type": "number", "minimum": 1, "maximum": 20 }
+          }
+        }
+      }
+    },
+
+    "music_cues": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "prompt", "seed", "volume_db"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^cue_[a-z0-9_]+$" },
+          "prompt": { "type": "string", "minLength": 3, "maxLength": 600 },
+          "seed": { "$ref": "#/$defs/seed" },
+          "volume_db": { "type": "number", "minimum": -40, "maximum": 6 },
+          "notes": { "$ref": "#/$defs/notes" }
+        }
+      }
+    },
+
+    "shots": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 12,
+      "items": { "$ref": "#/$defs/shot" }
+    },
+
+    "end_card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["duration_sec", "title", "ai_statement"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "duration_sec": { "type": "number", "minimum": 3, "maximum": 10 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "ai_statement": { "type": "string", "minLength": 20, "maxLength": 400 },
+        "credits": { "type": "array", "items": { "type": "string", "maxLength": 160 }, "maxItems": 12 }
+      }
+    },
+
+    "subtitles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "max_words_per_cue"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "enabled": { "type": "boolean" },
+        "max_words_per_cue": { "type": "integer", "minimum": 3, "maximum": 14 }
+      }
+    },
+
+    "ai_disclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["persistent_badge", "badge_text"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "persistent_badge": { "type": "boolean" },
+        "badge_text": { "type": "string", "minLength": 2, "maxLength": 40 }
+      }
+    }
+  },
+
+  "$defs": {
+    "notes": { "type": "string", "description": "Free-text human notes. Ignored by every stage and excluded from cache hashes." },
+    "seed": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+    "resolution": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 256, "maximum": 4096, "multipleOf": 2 },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model"],
+      "properties": {
+        "notes": { "$ref": "#/$defs/notes" },
+        "provider": { "type": "string", "enum": ["stub", "replicate", "macos_say"] },
+        "model": { "type": "string", "minLength": 1, "description": "Provider model ID, e.g. owner/name or owner/name:version for Replicate." },
+        "params": { "type": "object", "description": "Extra provider inputs, passed through verbatim and included in the cache hash." },
+        "input_map": {
+          "type": "object",
+          "description": "Rename pipeline inputs (prompt, negative_prompt, seed, width, height, image, duration, text, voice) to the model's input names; null drops that input.",
+          "additionalProperties": { "type": ["string", "null"] }
+        },
+        "pricing": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "List prices copied from the provider's pricing page. Leave null if unknown; costs are then logged as null, not guessed. Excluded from cache hashes.",
+          "properties": {
+            "usd_per_call": { "type": ["number", "null"], "minimum": 0 },
+            "usd_per_gpu_second": { "type": ["number", "null"], "minimum": 0 },
+            "source": { "type": ["string", "null"] },
+            "checked_on": { "type": ["string", "null"] }
+          }
+        },
+        "max_attempts": { "type": "integer", "minimum": 1, "maximum": 8, "default": 4 }
+      }
+    },
+    "shot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "duration_sec", "purpose", "reason", "image_prompt", "motion_prompt", "narration", "seed", "music_cue", "reference"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^s[0-9]{2}$" },
+        "duration_sec": { "type": "number", "minimum": 3, "maximum": 15 },
+        "purpose": { "type": "string", "minLength": 3, "maxLength": 300, "description": "What this shot does for the story." },
+        "reason": { "type": "string", "minLength": 3, "maxLength": 400, "description": "Why it is in the cut (or why it changed after user testing)." },
+        "image_prompt": { "type": "string", "minLength": 10, "maxLength": 1200 },
+        "motion_prompt": { "type": "string", "minLength": 3, "maxLength": 600 },
+        "narration": { "type": "string", "maxLength": 400, "description": "Spoken line for this shot. May be empty for a silent beat." },
+        "seed": { "$ref": "#/$defs/seed" },
+        "music_cue": { "type": ["string", "null"], "pattern": "^cue_[a-z0-9_]+$" },
+        "skip_video": { "type": "boolean", "default": false, "description": "true = never call the video model; render a Ken Burns move from the keyframe." },
+        "camera": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "zoom_start": { "type": "number", "minimum": 1.0, "maximum": 1.6 },
+            "zoom_end": { "type": "number", "minimum": 1.0, "maximum": 1.6 },
+            "pan": { "type": "string", "enum": ["none", "left", "right", "up", "down"] }
+          }
+        },
+        "vertical_focus_x": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.5, "description": "Horizontal crop centre (0=left, 1=right) for the 9:16 export." },
+        "reference": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["links"],
+          "properties": {
+            "links": { "type": "array", "items": { "type": "string", "format": "uri" }, "maxItems": 10 },
+            "image": { "type": ["string", "null"], "description": "Repo-relative path to a reference image you have rights to use (see ETHICS.md). Its file hash enters the keyframe cache key." },
+            "licence": { "type": ["string", "null"] }
+          }
+        },
+        "notes": { "$ref": "#/$defs/notes" }
+      }
+    }
+  }
+}
