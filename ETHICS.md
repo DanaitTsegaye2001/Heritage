@@ -21,6 +21,17 @@ words may be quoted (verbatim or paraphrased); their right to withdraw and how; 
 | P6 | user test round 2 | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
 | C1 | story / cultural source | [TODO] | [TODO] | [TODO] | [TODO] | [TODO] |
 
+### People shown or voiced in *Ordinary Freedom* (recorded 2026-11-26)
+
+| Character | Real person? | Likeness | Voice | Consent needed |
+|---|---|---|---|---|
+| Narrator ("I") | Author's own first-person story | AI-generated face, not a photo or likeness of the author | Gemini prebuilt voice "Kore" (no voice cloning) | No: author is the storyteller; no real face or voice is reproduced |
+| Meron | **Fictional** (confirmed by the author) | AI-generated | not voiced | No |
+| Selam | **Fictional** (confirmed by the author) | AI-generated | not voiced | No |
+| Background students, bus, street | Generic, AI-generated | — | — | No |
+
+Real places (Entoto, the National Museum at Amist Kilo, Mexico Square) are depicted generically from text prompts; no photos of them were used as references.
+
 ## 2. Cultural representation
 
 - Whose heritage is depicted, and who reviewed it: [TODO]

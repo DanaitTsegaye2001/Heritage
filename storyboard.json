@@ -119,17 +119,17 @@
     {
       "id": "narrator",
       "description": "the narrator, a 17-year-old Ethiopian schoolgirl with shoulder-length box braids, navy blue school sweater over a white collared shirt",
-      "notes": "DRAFT — adjust to the real narrator. AI-generated likeness, not a real face."
+      "notes": "First-person narrator 'I' (author's choice). AI-generated face; voiced by a Gemini prebuilt voice (Kore), not a cloned voice."
     },
     {
       "id": "meron",
       "description": "Meron, a tall 17-year-old Ethiopian schoolgirl with a high curly puff and small gold hoop earrings, navy blue school sweater",
-      "notes": "Named after a real friend? Record consent in ETHICS.md or change the name."
+      "notes": "Fictional character (confirmed by the author 2026-11-26). AI-generated face, not based on a real person."
     },
     {
       "id": "selam",
       "description": "Selam, a petite 17-year-old Ethiopian schoolgirl with short natural hair and round glasses, navy blue school sweater, white earbuds",
-      "notes": "Named after a real friend? Record consent in ETHICS.md or change the name."
+      "notes": "Fictional character (confirmed by the author 2026-11-26). AI-generated face, not based on a real person."
     }
   ],
   "music_cues": [
