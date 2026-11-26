@@ -1,196 +1,436 @@
 {
   "$schema": "./schema/storyboard.schema.json",
-  "notes": "STARTER STORYBOARD. Every creative field is a placeholder you are expected to rewrite. All models default to the offline 'stub' provider so `make film` runs from a clean clone with no keys; switch providers in `models` when you are ready to spend real GPU time. `notes` fields are ignored by the pipeline and never affect caching.",
+  "notes": "The Heritage Short: one ordinary school-trip day in Addis Ababa (Entoto → National Museum → bus home through Mexico Square). image: FLUX.1-schnell via free HF Space. tts: gemini-3.8-flash-lite-tts (free tier, 10 requests/day/model — F-103). video: Ken Burns. music: placeholder until a free score source is wired (F-100). `make film-offline` swaps every model to the stub provider.",
   "version": "1.0",
-  "title": "The Heritage Short",
-  "logline": "A grandchild who never had patience for her grandmother's loom learns, too late and just in time, that the patterns were the family's only written history.",
-  "audience": "PLACEHOLDER — e.g. 18–35 year-olds in diaspora families, watching on phones (9:16) and on a festival screen (16:9). Replace after user test 1.",
-  "intent": "PLACEHOLDER — e.g. leave viewers wanting to ask an elder to teach them one thing before it is lost. Replace with your own one-sentence intent.",
-
+  "title": "Ordinary Freedom",
+  "logline": "Three school friends spend one unremarkable field-trip day in Addis Ababa, and the narrator realises the ordinary days are the ones worth keeping.",
+  "audience": "DRAFT — confirm in DESIGN.md: Ethiopian high-school students and recent graduates (16–22), watching on phones (9:16) in a social feed, often with sound off.",
+  "intent": "DRAFT — confirm in DESIGN.md: leave viewers wanting to message their own school friends, and to notice that an uneventful day together is already a memory worth keeping.",
   "render": {
     "notes": "Keyframes and the master are 16:9; the 9:16 export is a crop of the master guided by each shot's vertical_focus_x. Keep subjects near the chosen focus.",
     "fps": 24,
-    "keyframe_resolution": [1920, 1080],
-    "master_resolution": [1920, 1080],
+    "keyframe_resolution": [
+      1920,
+      1080
+    ],
+    "master_resolution": [
+      1920,
+      1080
+    ],
     "exports": [
-      { "aspect": "16:9", "resolution": [1920, 1080] },
-      { "aspect": "9:16", "resolution": [1080, 1920] }
+      {
+        "aspect": "16:9",
+        "resolution": [
+          1920,
+          1080
+        ]
+      },
+      {
+        "aspect": "9:16",
+        "resolution": [
+          1080,
+          1920
+        ]
+      }
     ],
     "video_crf": 18
   },
-
   "models": {
     "notes": "image: FLUX.1-schnell via the free HF Space (Cloudflare lucid-origin also wired; its daily allocation ran out, FAILURES F-101). tts: Gemini free tier, 10 requests/day/model (F-103). video: no free hosted image-to-video, so shots use Ken Burns. music: stub until a free score source is wired (F-100). `make film-offline` swaps every model to the stub provider.",
-    "image": { "provider": "hf_space", "model": "black-forest-labs/FLUX.1-schnell", "params": { "api_name": "/infer", "width": 1344, "height": 768, "num_inference_steps": 4 }, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "free public HF Space (anonymous ZeroGPU quota)", "checked_on": "2026-11-26" } },
-    "video": { "provider": "stub", "model": "stub/no-video-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } },
-    "tts":   { "provider": "gemini", "model": "gemini-3.8-flash-tts", "params": { "style": "Read warmly and unhurried, like a grandchild remembering" }, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "Gemini API free tier (AI Studio)", "checked_on": "2026-11-26" } },
-    "music": { "provider": "stub", "model": "stub/chord-pad-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } }
+    "image": {
+      "provider": "hf_space",
+      "model": "black-forest-labs/FLUX.1-schnell",
+      "params": {
+        "api_name": "/infer",
+        "width": 1344,
+        "height": 768,
+        "num_inference_steps": 4
+      },
+      "pricing": {
+        "usd_per_call": 0,
+        "usd_per_gpu_second": null,
+        "source": "free public HF Space (anonymous ZeroGPU quota)",
+        "checked_on": "2026-11-26"
+      }
+    },
+    "video": {
+      "provider": "stub",
+      "model": "stub/no-video-v1",
+      "params": {},
+      "pricing": {
+        "usd_per_call": 0,
+        "usd_per_gpu_second": null,
+        "source": "local stub",
+        "checked_on": null
+      }
+    },
+    "tts": {
+      "provider": "gemini",
+      "model": "gemini-3.8-flash-lite-tts",
+      "params": {},
+      "notes": "No style instruction: pacing words slowed delivery to ~1.1 w/s (EXPERIMENTS E-06). flash-lite has its own 10/day free quota (F-103).",
+      "pricing": {
+        "usd_per_call": 0,
+        "usd_per_gpu_second": null,
+        "source": "Gemini API free tier (AI Studio)",
+        "checked_on": "2026-11-26"
+      }
+    },
+    "music": {
+      "provider": "stub",
+      "model": "stub/chord-pad-v1",
+      "params": {},
+      "pricing": {
+        "usd_per_call": 0,
+        "usd_per_gpu_second": null,
+        "source": "local stub",
+        "checked_on": null
+      }
+    }
   },
-
   "style": {
-    "notes": "Appended to every image prompt so the look stays consistent across shots.",
-    "image_prompt_suffix": "warm natural window light, 35mm film still, shallow depth of field, muted earth tones with indigo and ochre accents, intimate documentary feel",
-    "negative_prompt": "text, watermark, logo, extra fingers, deformed hands, oversaturated, plastic skin"
+    "notes": "Style block appended to every image prompt (Appendix B: lock the look first).",
+    "image_prompt_suffix": "warm natural light, 35mm film still, soft film grain, candid documentary feel, Addis Ababa, Ethiopia",
+    "negative_prompt": "text, watermark, logo, extra fingers, deformed hands, distorted faces"
   },
-
   "voice": {
-    "notes": "voice_id is provider-specific. Gemini TTS prebuilt voices include Kore, Puck, Charon, Aoede, Leda, … (style instruction lives in models.tts.params.style). Cloudflare aura-2-en uses names like luna/athena. For macos_say use a system voice such as 'Samantha'.",
+    "notes": "Gemini prebuilt voice. Kore measured at 2.02 w/s on flash-lite (E-06).",
     "voice_id": "Kore",
     "speed": 1.0,
     "seed": 7
   },
-
   "audio": {
     "narration_lead_sec": 0.4,
     "music_fade_in_sec": 1.0,
     "music_fade_out_sec": 2.0,
-    "ducking": { "threshold": 0.02, "ratio": 6, "attack_ms": 300, "release_ms": 1500 },
-    "loudness": { "integrated_lufs": -14, "true_peak_db": -1, "lra": 11 }
+    "ducking": {
+      "threshold": 0.02,
+      "ratio": 6,
+      "attack_ms": 300,
+      "release_ms": 1500
+    },
+    "loudness": {
+      "integrated_lufs": -14,
+      "true_peak_db": -1,
+      "lra": 11
+    }
   },
-
   "characters": [
-    { "id": "grandmother", "description": "an elderly grandmother in her late seventies with silver braided hair under a white cotton shawl, deep laugh lines, a dark green dress", "notes": "PLACEHOLDER — replace with your real character. Real people need consent first (ETHICS.md)." },
-    { "id": "narrator", "description": "a young woman in her twenties with short natural hair and a mustard sweater", "notes": "PLACEHOLDER" }
-  ],
-
-  "music_cues": [
-    { "id": "cue_memory",  "prompt": "gentle solo kalimba and soft strings, nostalgic, 70 bpm, no vocals", "seed": 101, "volume_db": -6 },
-    { "id": "cue_silence", "prompt": "sparse low cello drone, hushed, almost silent, no percussion",       "seed": 202, "volume_db": -10 },
-    { "id": "cue_passing", "prompt": "warm hopeful strings and kalimba returning, slow build, resolves",   "seed": 303, "volume_db": -6 }
-  ],
-
-  "shots": [
     {
-      "id": "s01", "duration_sec": 7,
-      "purpose": "Establish the grandmother through her hands, not her face.",
-      "reason": "Hands are the film's central motif; opening on them sets up the final line.",
-      "image_prompt": "extreme close-up of an elderly woman's weathered hands resting on a wooden hand loom, threads in indigo and ochre",
-      "motion_prompt": "very slow push-in, fingers twitch slightly, dust motes drift in the light",
-      "narration": "My grandmother never wrote anything down. Everything she knew lived in her hands.",
-      "seed": 1001, "music_cue": "cue_memory", "characters": ["grandmother"], "skip_video": false,
-      "camera": { "zoom_start": 1.0, "zoom_end": 1.15, "pan": "none" },
-      "vertical_focus_x": 0.5,
-      "reference": { "links": [], "image": null, "licence": null }
+      "id": "narrator",
+      "description": "the narrator, a 17-year-old Ethiopian schoolgirl with shoulder-length box braids, navy blue school sweater over a white collared shirt",
+      "notes": "DRAFT — adjust to the real narrator. AI-generated likeness, not a real face."
     },
     {
-      "id": "s02", "duration_sec": 7.5,
-      "purpose": "Show the ritual and the sound world of the loom.",
-      "reason": "Gives the audience a rhythm to lose later in s05.",
-      "image_prompt": "wide shot of a small sunlit room on a Sunday morning, an elderly woman weaving at a wooden loom, a child playing on the floor in the background",
-      "motion_prompt": "static camera, the shuttle moves left to right, curtains sway",
-      "narration": "On Sunday mornings the house filled with the clack of her loom, steady as a heartbeat.",
-      "seed": 1002, "music_cue": "cue_memory", "characters": ["grandmother"], "skip_video": false,
-      "camera": { "zoom_start": 1.1, "zoom_end": 1.0, "pan": "right" },
-      "vertical_focus_x": 0.4,
-      "reference": { "links": [], "image": null, "licence": null }
+      "id": "meron",
+      "description": "Meron, a tall 17-year-old Ethiopian schoolgirl with a high curly puff and small gold hoop earrings, navy blue school sweater",
+      "notes": "Named after a real friend? Record consent in ETHICS.md or change the name."
     },
     {
-      "id": "s03", "duration_sec": 8,
-      "purpose": "Reveal that the patterns are a language.",
-      "reason": "The key idea of the film; must be legible in under 8 seconds.",
-      "image_prompt": "top-down macro shot of handwoven cloth showing a zigzag river motif and small eight-pointed stars, indigo on ochre",
-      "motion_prompt": "slow pan along the weave following the zigzag",
-      "narration": "Each pattern meant something. A zigzag for the river her family crossed. A star for every child born.",
-      "seed": 1003, "music_cue": "cue_memory", "skip_video": false,
-      "camera": { "zoom_start": 1.2, "zoom_end": 1.2, "pan": "left" },
-      "vertical_focus_x": 0.5,
-      "reference": { "links": [], "image": null, "licence": null }
-    },
-    {
-      "id": "s04", "duration_sec": 7,
-      "purpose": "Introduce the narrator's indifference.",
-      "reason": "Creates the regret the second half resolves.",
-      "image_prompt": "a teenage girl on a couch absorbed in her phone, the loom blurred in the foreground, late afternoon light",
-      "motion_prompt": "rack focus from loom to girl, she does not look up",
-      "narration": "As a kid, I thought it was just thread. I was too busy to sit still.",
-      "seed": 1004, "music_cue": "cue_memory", "characters": ["narrator"], "skip_video": false,
-      "camera": { "zoom_start": 1.0, "zoom_end": 1.1, "pan": "right" },
-      "vertical_focus_x": 0.65,
-      "reference": { "links": [], "image": null, "licence": null }
-    },
-    {
-      "id": "s05", "duration_sec": 8,
-      "purpose": "The turn: age and loss of skill.",
-      "reason": "Music drops out here so the silence does the work.",
-      "image_prompt": "close-up of elderly trembling hands failing to pass a shuttle through threads, cold blue winter light",
-      "motion_prompt": "handheld subtle drift, hands tremble, shuttle slips",
-      "narration": "Then her hands began to shake. One winter, the loom went quiet, and the house felt smaller.",
-      "seed": 1005, "music_cue": "cue_silence", "characters": ["grandmother"], "skip_video": false,
-      "camera": { "zoom_start": 1.15, "zoom_end": 1.25, "pan": "none" },
-      "vertical_focus_x": 0.5,
-      "reference": { "links": [], "image": null, "licence": null }
-    },
-    {
-      "id": "s06", "duration_sec": 8,
-      "purpose": "Discovery of the unfinished cloth.",
-      "reason": "A concrete object to carry the emotion; motivates the ask in s07.",
-      "image_prompt": "a wooden drawer opened to reveal a folded, half-finished handwoven cloth with a wooden shuttle tucked inside",
-      "motion_prompt": "slow tilt down into the drawer",
-      "narration": "I found her last cloth folded in a drawer, half finished, the shuttle still tucked inside.",
-      "seed": 1006, "music_cue": "cue_silence", "skip_video": true,
-      "camera": { "zoom_start": 1.0, "zoom_end": 1.2, "pan": "down" },
-      "vertical_focus_x": 0.5,
-      "reference": { "links": [], "image": null, "licence": null },
-      "notes": "skip_video=true: deliberately uses the Ken Burns fallback (a still object benefits little from generated motion)."
-    },
-    {
-      "id": "s07", "duration_sec": 8.5,
-      "purpose": "The ask: the narrator chooses to learn.",
-      "reason": "Active choice by the protagonist; the emotional pivot.",
-      "image_prompt": "young woman seated at the loom, her elderly grandmother beside her guiding her fingers with her own, warm lamp light",
-      "motion_prompt": "slow orbit around the two pairs of hands",
-      "narration": "So I asked her to teach me. She couldn't weave anymore, but she could still guide my fingers.",
-      "seed": 1007, "music_cue": "cue_passing", "characters": ["narrator", "grandmother"], "skip_video": false,
-      "camera": { "zoom_start": 1.05, "zoom_end": 1.2, "pan": "left" },
-      "vertical_focus_x": 0.45,
-      "reference": { "links": [], "image": null, "licence": null }
-    },
-    {
-      "id": "s08", "duration_sec": 8,
-      "purpose": "Learning montage with humour.",
-      "reason": "Lightens tone before the ending; shows effort, not talent.",
-      "image_prompt": "medium shot of a grandmother laughing warmly while her granddaughter frowns at a tangled weave, cozy room",
-      "motion_prompt": "gentle push-in, grandmother laughs, granddaughter sighs and smiles",
-      "narration": "Over, under, pull. I got it wrong a hundred times. She laughed every single time.",
-      "seed": 1008, "music_cue": "cue_passing", "characters": ["grandmother", "narrator"], "skip_video": false,
-      "camera": { "zoom_start": 1.0, "zoom_end": 1.1, "pan": "none" },
-      "vertical_focus_x": 0.5,
-      "reference": { "links": [], "image": null, "licence": null }
-    },
-    {
-      "id": "s09", "duration_sec": 8,
-      "purpose": "Payoff: the language continues with a new symbol.",
-      "reason": "Pays off s03's star-per-child rule with the next generation.",
-      "image_prompt": "macro shot of freshly woven cloth where a zigzag river and stars appear, one new star woven in bright thread",
-      "motion_prompt": "slow pan ending on the new bright star",
-      "narration": "Slowly the zigzag appeared. Then the stars. Then a new one, for my daughter.",
-      "seed": 1009, "music_cue": "cue_passing", "skip_video": false,
-      "camera": { "zoom_start": 1.1, "zoom_end": 1.3, "pan": "right" },
-      "vertical_focus_x": 0.6,
-      "reference": { "links": [], "image": null, "licence": null }
-    },
-    {
-      "id": "s10", "duration_sec": 7,
-      "purpose": "Close the loop on hands; state the theme.",
-      "reason": "Mirrors s01 with three generations of hands.",
-      "image_prompt": "three pairs of hands of different generations, elderly, adult and a small child, resting together on a finished handwoven cloth",
-      "motion_prompt": "slow pull-back, the child's fingers trace a star",
-      "narration": "Some things can't be written down. They have to be passed from hand to hand.",
-      "seed": 1010, "music_cue": "cue_passing", "characters": ["grandmother", "narrator"], "skip_video": false,
-      "camera": { "zoom_start": 1.2, "zoom_end": 1.0, "pan": "none" },
-      "vertical_focus_x": 0.5,
-      "reference": { "links": [], "image": null, "licence": null }
+      "id": "selam",
+      "description": "Selam, a petite 17-year-old Ethiopian schoolgirl with short natural hair and round glasses, navy blue school sweater, white earbuds",
+      "notes": "Named after a real friend? Record consent in ETHICS.md or change the name."
     }
   ],
-
+  "music_cues": [
+    {
+      "id": "cue_morning",
+      "prompt": "bright light acoustic guitar and soft krar-like plucked strings, playful, 96 bpm, instrumental, no vocals",
+      "seed": 101,
+      "volume_db": -6
+    },
+    {
+      "id": "cue_museum",
+      "prompt": "quiet curious marimba and soft pads, hushed, 80 bpm, instrumental",
+      "seed": 202,
+      "volume_db": -9
+    },
+    {
+      "id": "cue_home",
+      "prompt": "warm nostalgic electric piano and gentle strings, golden-hour feeling, 72 bpm, resolves, instrumental",
+      "seed": 303,
+      "volume_db": -6
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "duration_sec": 8,
+      "purpose": "Establish place, time and season: cold morning on Entoto.",
+      "reason": "Opens on the feeling of the day (crisp air) before any plot.",
+      "image_prompt": "wide shot of a misty eucalyptus forest on the Entoto ridge at early morning, a group of high-school students in navy sweaters walking up a dirt path, sun rays through tall trees",
+      "motion_prompt": "slow push-in, mist drifting through the eucalyptus",
+      "narration": "The morning air at Entoto was cold enough to make us pull our sweaters tighter.",
+      "seed": 1001,
+      "music_cue": "cue_morning",
+      "characters": [],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.0,
+        "zoom_end": 1.15,
+        "pan": "none"
+      },
+      "vertical_focus_x": 0.5,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s02",
+      "duration_sec": 8.5,
+      "purpose": "Introduce the three friends together.",
+      "reason": "The film is about this trio; we meet them as a unit.",
+      "image_prompt": "three teenage schoolgirl friends standing together at a stone lookout point on a mountain ridge, catching their breath and smiling, morning light",
+      "motion_prompt": "slight handheld drift, hair moving in the wind",
+      "narration": "Meron, Selam and I stood at the lookout, still breathless from the steep climb up.",
+      "seed": 1002,
+      "music_cue": "cue_morning",
+      "characters": [
+        "narrator",
+        "meron",
+        "selam"
+      ],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.1,
+        "zoom_end": 1.0,
+        "pan": "right"
+      },
+      "vertical_focus_x": 0.5,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s03",
+      "duration_sec": 7,
+      "purpose": "Silent establishing view of Addis Ababa from above.",
+      "reason": "A breath without narration lets the city and music carry the moment.",
+      "image_prompt": "panoramic view from Entoto over Addis Ababa, a sea of terracotta and tin roofs in a soft morning haze, distant hills, no people",
+      "motion_prompt": "slow pan right across the city",
+      "narration": "",
+      "seed": 1003,
+      "music_cue": "cue_morning",
+      "characters": [],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.2,
+        "zoom_end": 1.2,
+        "pan": "right"
+      },
+      "vertical_focus_x": 0.5,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s04",
+      "duration_sec": 8.5,
+      "purpose": "The photo that never works: humour and closeness.",
+      "reason": "Shows friendship through behaviour (laughing) instead of telling it.",
+      "image_prompt": "three teenage schoolgirls laughing hard while trying to take a selfie on a phone at a mountain lookout, wind blowing their hair, candid",
+      "motion_prompt": "gentle push-in, the girls burst out laughing",
+      "narration": "Meron insisted on a photo before the wind ruined our hair. Nobody could stand still.",
+      "seed": 1004,
+      "music_cue": "cue_morning",
+      "characters": [
+        "meron",
+        "selam",
+        "narrator"
+      ],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.0,
+        "zoom_end": 1.12,
+        "pan": "none"
+      },
+      "vertical_focus_x": 0.45,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s05",
+      "duration_sec": 8.5,
+      "purpose": "Shift of energy: quiet curiosity in the museum.",
+      "reason": "Contrast with the loud morning; music drops to a hush.",
+      "image_prompt": "three schoolgirls in navy sweaters leaning close to a glass display case in a quiet museum gallery, soft spotlights, whispering",
+      "motion_prompt": "slow lateral dolly along the glass cases",
+      "narration": "After lunch, the National Museum hushed us. We crowded the glass cases, whispering jokes.",
+      "seed": 1005,
+      "music_cue": "cue_museum",
+      "characters": [
+        "narrator",
+        "meron",
+        "selam"
+      ],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.05,
+        "zoom_end": 1.15,
+        "pan": "left"
+      },
+      "vertical_focus_x": 0.5,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s06",
+      "duration_sec": 8.5,
+      "purpose": "Shared snack on the courtyard steps: everyday ritual.",
+      "reason": "Specific, local details (kolo, mango juice) make it feel lived.",
+      "image_prompt": "close-up of hands sharing a paper bag of roasted kolo grains and small mango juice boxes on old stone steps in a sunny courtyard",
+      "motion_prompt": "static camera, a hand reaches into the bag",
+      "narration": "Outside, we sat on the stone steps sharing roasted kolo and little mango juice boxes.",
+      "seed": 1006,
+      "music_cue": "cue_museum",
+      "characters": [],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.1,
+        "zoom_end": 1.2,
+        "pan": "none"
+      },
+      "vertical_focus_x": 0.5,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s07",
+      "duration_sec": 8.5,
+      "purpose": "The heart of it: easy conversation about the future.",
+      "reason": "States the theme (being understood) through an intimate moment.",
+      "image_prompt": "three teenage schoolgirls sitting on stone steps in a museum courtyard talking and laughing, one gesturing mid-sentence, afternoon light",
+      "motion_prompt": "slow orbit around the three friends",
+      "narration": "We talked about universities and favourite teachers, and laughed at each other's half-finished sentences.",
+      "seed": 1007,
+      "music_cue": "cue_museum",
+      "characters": [
+        "narrator",
+        "meron",
+        "selam"
+      ],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.0,
+        "zoom_end": 1.1,
+        "pan": "right"
+      },
+      "vertical_focus_x": 0.5,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s08",
+      "duration_sec": 8.5,
+      "purpose": "Time passes: the bus ride home in golden traffic.",
+      "reason": "Golden light signals the day ending; sets up the reflection.",
+      "image_prompt": "a yellow school bus stuck in slow afternoon traffic at Mexico Square in Addis Ababa, golden hour sunlight, minibuses and pedestrians",
+      "motion_prompt": "slow push-in on the bus windows",
+      "narration": "The ride home crawled through Mexico Square traffic, golden light spilling across the windows.",
+      "seed": 1008,
+      "music_cue": "cue_home",
+      "characters": [],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.0,
+        "zoom_end": 1.15,
+        "pan": "left"
+      },
+      "vertical_focus_x": 0.55,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s09",
+      "duration_sec": 9,
+      "purpose": "Tender detail: Selam asleep, Meron with the photos.",
+      "reason": "The quiet intimacy of tiredness shows how close they are.",
+      "image_prompt": "inside a school bus at golden hour, a schoolgirl with round glasses asleep on her friend's shoulder with one earbud in, another friend scrolling photos on her phone beside them",
+      "motion_prompt": "very slow push-in, warm light flickers across faces",
+      "narration": "Selam fell asleep on my shoulder, one earbud still in. Meron hunted for one unblurry photo.",
+      "seed": 1009,
+      "music_cue": "cue_home",
+      "characters": [
+        "selam",
+        "narrator",
+        "meron"
+      ],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.0,
+        "zoom_end": 1.12,
+        "pan": "none"
+      },
+      "vertical_focus_x": 0.45,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    },
+    {
+      "id": "s10",
+      "duration_sec": 9,
+      "purpose": "Reflection and theme: ordinary days are worth keeping.",
+      "reason": "Ends inside the narrator's head, looking out at the city.",
+      "image_prompt": "a teenage schoolgirl gazing out of a bus window at Addis Ababa streets passing in golden evening light, reflection on the glass, peaceful expression",
+      "motion_prompt": "slow pull-back from the window",
+      "narration": "Nothing dramatic happened. I just wanted to remember ordinary days like this. That was freedom.",
+      "seed": 1010,
+      "music_cue": "cue_home",
+      "characters": [
+        "narrator"
+      ],
+      "skip_video": false,
+      "camera": {
+        "zoom_start": 1.15,
+        "zoom_end": 1.0,
+        "pan": "none"
+      },
+      "vertical_focus_x": 0.5,
+      "reference": {
+        "links": [],
+        "image": null,
+        "licence": null
+      }
+    }
+  ],
   "end_card": {
     "duration_sec": 5,
-    "title": "The Heritage Short",
-    "ai_statement": "This film was made with generative AI. Images, motion, narration voice and music were AI-generated from a written storyboard.",
-    "credits": ["Written & directed by: PLACEHOLDER", "Models: see ETHICS.md"]
+    "title": "Ordinary Freedom",
+    "ai_statement": "This film was made with generative AI. Images, motion, narration voice and music were AI-generated from a written storyboard based on a real school trip.",
+    "credits": [
+      "Story & direction: PLACEHOLDER (your name)",
+      "The Heritage Short · 10 Academy"
+    ]
   },
-
-  "subtitles": { "enabled": true, "max_words_per_cue": 7 },
-
-  "ai_disclosure": { "persistent_badge": true, "badge_text": "AI-generated" }
+  "subtitles": {
+    "enabled": true,
+    "max_words_per_cue": 7
+  },
+  "ai_disclosure": {
+    "persistent_badge": true,
+    "badge_text": "AI-generated"
+  }
 }
