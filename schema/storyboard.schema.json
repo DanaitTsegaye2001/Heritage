@@ -240,6 +240,7 @@
         "seed": { "$ref": "#/$defs/seed" },
         "music_cue": { "type": ["string", "null"], "pattern": "^cue_[a-z0-9_]+$" },
         "characters": { "type": "array", "items": { "type": "string" }, "maxItems": 4, "uniqueItems": true },
+        "tts_model": { "$ref": "#/$defs/model", "description": "Per-shot TTS override, e.g. when one model's daily quota runs out (FAILURES F-105)." },
         "skip_video": { "type": "boolean", "default": false, "description": "true = never call the video model; render a Ken Burns move from the keyframe." },
         "camera": {
           "type": "object",

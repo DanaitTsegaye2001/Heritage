@@ -413,6 +413,18 @@
         "links": [],
         "image": null,
         "licence": null
+      },
+      "tts_model": {
+        "provider": "gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "params": {},
+        "notes": "flash-lite hit its 10/day free quota on this line (FAILURES F-105). Same voice name (Kore), different model — listen for a timbre change.",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "Gemini API free tier",
+          "checked_on": "2026-11-26"
+        }
       }
     }
   ],

@@ -16,8 +16,7 @@ VERSION = "narration/v1"
 
 def run(ctx: Ctx) -> None:
     sb = ctx.sb
-    cfg = sb["models"]["tts"]
-    provider = get_provider(cfg["provider"])
+    default_cfg = sb["models"]["tts"]
     voice = sb["voice"]
     lead = sb["audio"]["narration_lead_sec"]
     out_dir = ctx.stage_dir("narration")
@@ -26,6 +25,8 @@ def run(ctx: Ctx) -> None:
         sid, text = shot["id"], shot["narration"].strip()
         if not ctx.selected(sid) or not text:
             continue
+        cfg = shot.get("tts_model") or default_cfg
+        provider = get_provider(cfg["provider"])
         seed = voice.get("seed")
         inputs = {"v": VERSION, "model": model_key(cfg), "text": text, "voice_id": voice["voice_id"],
                   "speed": voice.get("speed", 1.0), "seed": seed}
@@ -35,7 +36,7 @@ def run(ctx: Ctx) -> None:
 
         meta = run_model_cached(
             ctx, stage="narration", shot_id=sid, cfg=cfg, inputs=inputs, out=out_dir / f"{sid}.wav", seed=seed,
-            call=lambda tmp, text=text: provider.tts(cfg=cfg, text=text, voice_id=voice["voice_id"],
+            call=lambda tmp, text=text, cfg=cfg, provider=provider: provider.tts(cfg=cfg, text=text, voice_id=voice["voice_id"],
                                                      speed=voice.get("speed", 1.0), seed=seed, out=tmp),
             postprocess=measure)
         room = shot["duration_sec"] - lead
