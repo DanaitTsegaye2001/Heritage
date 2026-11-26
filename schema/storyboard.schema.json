@@ -187,7 +187,7 @@
       "required": ["provider", "model"],
       "properties": {
         "notes": { "$ref": "#/$defs/notes" },
-        "provider": { "type": "string", "enum": ["stub", "replicate", "macos_say"] },
+        "provider": { "type": "string", "enum": ["stub", "replicate", "macos_say", "cloudflare"] },
         "model": { "type": "string", "minLength": 1, "description": "Provider model ID, e.g. owner/name or owner/name:version for Replicate." },
         "params": { "type": "object", "description": "Extra provider inputs, passed through verbatim and included in the cache hash." },
         "input_map": {
