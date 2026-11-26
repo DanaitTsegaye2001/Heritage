@@ -46,7 +46,7 @@
         "height": 768,
         "num_inference_steps": 4
       },
-      "notes": "Free public Space. Anonymous ZeroGPU quota allowed 3 images (s01–s03); s04–s10 override to local SD-Turbo (FAILURES F-106).",
+      "notes": "Free public Space (anonymous ZeroGPU quota; it refilled after ~80 min — FAILURES F-106).",
       "pricing": {
         "usd_per_call": 0,
         "usd_per_gpu_second": null,
@@ -257,23 +257,6 @@
         "links": [],
         "image": null,
         "licence": null
-      },
-      "image_model": {
-        "provider": "local_diffusers",
-        "model": "stabilityai/sd-turbo",
-        "params": {
-          "width": 768,
-          "height": 432,
-          "num_inference_steps": 4,
-          "guidance_scale": 0.0
-        },
-        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
-        "pricing": {
-          "usd_per_call": 0,
-          "usd_per_gpu_second": null,
-          "source": "local machine",
-          "checked_on": "2026-11-26"
-        }
       }
     },
     {
@@ -304,19 +287,20 @@
         "licence": null
       },
       "image_model": {
-        "provider": "local_diffusers",
-        "model": "stabilityai/sd-turbo",
+        "provider": "hf_space",
+        "model": "multimodalart/FLUX.1-merged",
         "params": {
-          "width": 768,
-          "height": 432,
-          "num_inference_steps": 4,
-          "guidance_scale": 0.0
+          "api_name": "/infer",
+          "width": 1344,
+          "height": 768,
+          "guidance_scale": 3.5,
+          "num_inference_steps": 8
         },
-        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "local machine",
+          "source": "free public HF Space",
           "checked_on": "2026-11-26"
         }
       }
@@ -345,19 +329,20 @@
         "licence": null
       },
       "image_model": {
-        "provider": "local_diffusers",
-        "model": "stabilityai/sd-turbo",
+        "provider": "hf_space",
+        "model": "multimodalart/FLUX.1-merged",
         "params": {
-          "width": 768,
-          "height": 432,
-          "num_inference_steps": 4,
-          "guidance_scale": 0.0
+          "api_name": "/infer",
+          "width": 1344,
+          "height": 768,
+          "guidance_scale": 3.5,
+          "num_inference_steps": 8
         },
-        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "local machine",
+          "source": "free public HF Space",
           "checked_on": "2026-11-26"
         }
       }
@@ -390,19 +375,20 @@
         "licence": null
       },
       "image_model": {
-        "provider": "local_diffusers",
-        "model": "stabilityai/sd-turbo",
+        "provider": "hf_space",
+        "model": "multimodalart/FLUX.1-merged",
         "params": {
-          "width": 768,
-          "height": 432,
-          "num_inference_steps": 4,
-          "guidance_scale": 0.0
+          "api_name": "/infer",
+          "width": 1344,
+          "height": 768,
+          "guidance_scale": 3.5,
+          "num_inference_steps": 8
         },
-        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "local machine",
+          "source": "free public HF Space",
           "checked_on": "2026-11-26"
         }
       }
@@ -431,19 +417,20 @@
         "licence": null
       },
       "image_model": {
-        "provider": "local_diffusers",
-        "model": "stabilityai/sd-turbo",
+        "provider": "hf_space",
+        "model": "multimodalart/FLUX.1-merged",
         "params": {
-          "width": 768,
-          "height": 432,
-          "num_inference_steps": 4,
-          "guidance_scale": 0.0
+          "api_name": "/infer",
+          "width": 1344,
+          "height": 768,
+          "guidance_scale": 3.5,
+          "num_inference_steps": 8
         },
-        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "local machine",
+          "source": "free public HF Space",
           "checked_on": "2026-11-26"
         }
       }
@@ -476,19 +463,20 @@
         "licence": null
       },
       "image_model": {
-        "provider": "local_diffusers",
-        "model": "stabilityai/sd-turbo",
+        "provider": "hf_space",
+        "model": "multimodalart/FLUX.1-merged",
         "params": {
-          "width": 768,
-          "height": 432,
-          "num_inference_steps": 4,
-          "guidance_scale": 0.0
+          "api_name": "/infer",
+          "width": 1344,
+          "height": 768,
+          "guidance_scale": 3.5,
+          "num_inference_steps": 8
         },
-        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "local machine",
+          "source": "free public HF Space",
           "checked_on": "2026-11-26"
         }
       }
@@ -531,19 +519,20 @@
         }
       },
       "image_model": {
-        "provider": "local_diffusers",
-        "model": "stabilityai/sd-turbo",
+        "provider": "hf_space",
+        "model": "multimodalart/FLUX.1-merged",
         "params": {
-          "width": 768,
-          "height": 432,
-          "num_inference_steps": 4,
-          "guidance_scale": 0.0
+          "api_name": "/infer",
+          "width": 1344,
+          "height": 768,
+          "guidance_scale": 3.5,
+          "num_inference_steps": 8
         },
-        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "local machine",
+          "source": "free public HF Space",
           "checked_on": "2026-11-26"
         }
       }
