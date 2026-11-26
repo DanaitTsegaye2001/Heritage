@@ -7,13 +7,16 @@ RUN     := $(PY) -m pipeline.run
 SHOTS   ?=
 SHOTARG := $(if $(SHOTS),--shots $(SHOTS),)
 
-.PHONY: film setup validate script keyframes shots narration music assemble reroll costs test clean-outputs help
+.PHONY: film film-offline setup validate script keyframes shots narration music assemble reroll costs test clean-outputs help
 
 help:            ## list targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-14s %s\n", $$1, $$2}'
 
 film: $(STAMP)   ## validate + run every stage -> outputs/final/heritage_16x9.mp4 and heritage_9x16.mp4
 	$(RUN)
+
+film-offline: $(STAMP) ## same film with stub providers only: no API keys, no network, $0
+	$(RUN) --offline
 
 $(STAMP): requirements.txt
 	$(PYTHON) -m venv $(VENV)

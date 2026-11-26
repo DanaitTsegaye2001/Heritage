@@ -83,7 +83,8 @@ class SelectiveRegenerationTest(unittest.TestCase):
 
     def run_pipeline(self, run_id: str):
         env = {**os.environ, "HERITAGE_STORYBOARD": str(self.sb_path), "HERITAGE_OUTPUTS": str(self.out),
-               "HERITAGE_RUNS_LOG": str(self.log), "HERITAGE_RUN_ID": run_id}
+               "HERITAGE_RUNS_LOG": str(self.log), "HERITAGE_RUN_ID": run_id,
+               "HERITAGE_OFFLINE": "1"}  # stub providers: free, deterministic, no network
         proc = subprocess.run([sys.executable, "-m", "pipeline.run"], cwd=ROOT, env=env,
                               capture_output=True, text=True)
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
