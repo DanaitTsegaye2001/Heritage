@@ -27,7 +27,10 @@ from .common.media import BITEXACT, SAMPLE_RATE, X264, X264_FAST, check_ffmpeg, 
 from .common.storyboard import cue_spans, timeline, total_duration
 from .common.text_render import badge_png, end_card_png, subtitle_png
 
-VERSION = "assemble/v1"
+# Bump only the step whose code changed so other cached steps stay valid.
+MIX_VERSION = "assemble/v2"
+CLIP_VERSION = "assemble/v2"
+FINAL_VERSION = "assemble/v2"  # v2: half-open subtitle intervals (no overlap frame)
 
 
 def aspect_tag(aspect: str) -> str:
@@ -55,7 +58,7 @@ def build_mix(ctx: Ctx) -> dict[str, Any]:
             music.append({"path": p, "sha": m["output_hash"], "at": spans[c["id"]][0],
                           "dur": spans[c["id"]][1] - spans[c["id"]][0], "db": c["volume_db"]})
 
-    inputs = {"v": VERSION, "total": total, "audio": audio,
+    inputs = {"v": MIX_VERSION, "total": total, "audio": audio,
               "narration": [{k: n[k] for k in ("sha", "at")} for n in narr],
               "music": [{k: m[k] for k in ("sha", "at", "dur", "db")} for m in music]}
 
@@ -148,7 +151,7 @@ def normalise_clip(ctx: Ctx, shot: dict, w: int, h: int, tag: str) -> dict:
     src_meta = require_meta(src, "make shots")
     fps, dur = ctx.sb["render"]["fps"], shot["duration_sec"]
     focus = shot.get("vertical_focus_x", 0.5) if h > w else 0.5
-    inputs = {"v": VERSION, "src": src_meta["output_hash"], "size": [w, h], "fps": fps, "dur": dur, "focus": focus,
+    inputs = {"v": CLIP_VERSION, "src": src_meta["output_hash"], "size": [w, h], "fps": fps, "dur": dur, "focus": focus,
               "crf": ctx.sb["render"].get("video_crf", 18)}
 
     def build(tmp: Path) -> None:
@@ -163,7 +166,7 @@ def normalise_clip(ctx: Ctx, shot: dict, w: int, h: int, tag: str) -> dict:
 
 def end_card_clip(ctx: Ctx, w: int, h: int, tag: str) -> dict:
     ec, fps = ctx.sb["end_card"], ctx.sb["render"]["fps"]
-    inputs = {"v": VERSION, "end_card": {k: ec.get(k) for k in ("duration_sec", "title", "ai_statement", "credits")},
+    inputs = {"v": CLIP_VERSION, "end_card": {k: ec.get(k) for k in ("duration_sec", "title", "ai_statement", "credits")},
               "size": [w, h], "fps": fps}
 
     def build(tmp: Path) -> None:
@@ -191,7 +194,7 @@ def render_export(ctx: Ctx, export: dict, mix_meta: dict, cues: list[dict]) -> P
     end_card_start = total - sb["end_card"]["duration_sec"]
     subs_on = sb["subtitles"]["enabled"]
 
-    inputs = {"v": VERSION, "clips": [m["output_hash"] for m in clip_metas], "end_card": ec_meta["output_hash"],
+    inputs = {"v": FINAL_VERSION, "clips": [m["output_hash"] for m in clip_metas], "end_card": ec_meta["output_hash"],
               "mix": mix_meta["output_hash"], "cues": cues if subs_on else [], "badge": badge,
               "size": [w, h], "crf": sb["render"].get("video_crf", 18)}
 
@@ -218,7 +221,7 @@ def render_export(ctx: Ctx, export: dict, mix_meta: dict, cues: list[dict]) -> P
         cur = "v0"
         for k, (png, x, y, a, b) in enumerate(overlays):
             args += ["-i", png]
-            g.append(f"[{cur}][{n_vid + k}:v]overlay=x={x}:y={y}:enable='between(t,{a:.3f},{b:.3f})'[v{k + 1}]")
+            g.append(f"[{cur}][{n_vid + k}:v]overlay=x={x}:y={y}:enable='gte(t,{a:.3f})*lt(t,{b:.3f})'[v{k + 1}]")
             cur = f"v{k + 1}"
         args += ["-i", ctx.outputs / "assemble" / "mix.wav"]
         audio_idx = n_vid + len(overlays)

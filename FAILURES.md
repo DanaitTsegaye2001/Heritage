@@ -38,6 +38,12 @@ Entry format:
 - Fix: `write_if_changed()` for all derived text artifacts.
 - Prevention: the test asserts a no-op run changes no file mtimes.
 
+### F-004 — Two subtitle cues visible on the boundary frame
+- When: 2026-11-26, visual check of a 9:16 frame at t=16.5 s.
+- Symptom: a faint second line showed through the subtitle box. The SRT showed a cue boundary at exactly 16.500 s.
+- Cause: `enable='between(t,a,b)'` is inclusive at both ends, so the outgoing and incoming cues overlapped for one frame, and the semi-transparent box let the other text show.
+- Fix: half-open interval `gte(t,a)*lt(t,b)`. Assemble versions are now split per step (mix / clips / final), so a final-mux fix doesn't force clips to re-encode.
+
 ## Production runs
 
 ### F-100 — [TODO]
