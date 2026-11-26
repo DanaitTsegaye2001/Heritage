@@ -73,7 +73,31 @@ Entry format:
 - Workaround: the quota is per model, so `gemini-3.8-flash-lite-tts` still works (verified: 2.02 w/s, 5.1 s latency). The Gemini adapter fails fast on `limit: 0` / per-day messages but still retries per-minute limits. Plan: iterate the radio cut with free local TTS (`macos_say`) and spend Gemini requests only on locked lines (one per shot, plus few retakes).
 - Prevention: count TTS calls in `runs.jsonl` before regenerating everything; editing one line costs one request thanks to the cache.
 
-### F-104 — [TODO]
+### F-104 — "Unhurried" TTS style made every line overflow its shot
+- When: 2026-11-26, first full narration with Gemini TTS.
+- Symptom: 10/10 lines ran 9.7–13.2 s against 6.6–8.1 s slots (1.1–1.7 w/s).
+- Fix: drop pacing words from the style instruction. See EXPERIMENTS E-06 (measured 1.09 → 2.25 w/s).
+
+### F-105 — flash-lite TTS hit its 10/day quota on the last line
+- When: 2026-11-26 ~19:30 EAT, narration for *Ordinary Freedom* (9 lines, 1 request already used by a pace probe).
+- Symptom: s10 → `429 … limit: 10, model: gemini-3.8-flash-lite-tts`. The adapter failed fast; the 8 finished lines stayed cached.
+- Workaround: per-shot `tts_model` override. s10 uses `gemini-2.5-flash-preview-tts` with the same voice name (Kore), which has its own quota. Trade-off: a possible slight timbre change on the last line (to check by ear).
+
+### F-106 — No free image quota left for 7 keyframes
+- When: 2026-11-26 ~19:40–20:10 EAT.
+- Symptom, in order:
+  1. HF Space `black-forest-labs/FLUX.1-schnell`: `AppError: You have exceeded your ZeroGPU runs limit` after **3 anonymous images** (s01–s03).
+  2. Pollinations (keyless): `503 Classic API is at its limit`, then `402`; when it answered, images were 1015×580 with a watermark despite `nologo=true`, wrong head count (4 girls for "three") and distorted faces. Rejected.
+  3. HF Space `multimodalart/FLUX.1-merged`: one good image, then the same ZeroGPU limit. The quota is shared per IP across Spaces.
+  4. `black-forest-labs/FLUX.2-klein-4B` Space: max 1024 px (our request of 1344 was rejected), and the same shared quota applies.
+- Workaround: open weights **locally**. `stabilityai/sd-turbo` with diffusers on the M1's MPS backend (no quota) for s04–s10, via a per-shot `image_model` override; s01–s03 keep their FLUX.1-schnell keyframes. Trade-off: lower fidelity and a different look from s01–s03 (style block and character descriptions are kept to limit the drift).
+- Prevention: a free HF token (or Cloudflare's next daily allocation at 03:00 EAT) would let all 10 shots use one FLUX model. `make reroll SHOTS=s04,...` regenerates only those shots once quota exists.
+
+### F-107 — No free AI music source tonight
+- Lyria: free quota 0 (F-100). ACE-Step 1.5: needs a GPU (no Kaggle/Colab session available).
+- Workaround: `procedural` provider, an original score composed in code (I–V–vi–IV arpeggios, pad, bass; tempo and mood from each cue prompt). It is **not AI**, and the end card says so.
+
+### F-108 — [TODO]
 - When / run_id / stage / shot:
 - Symptom:
 - Cause:
