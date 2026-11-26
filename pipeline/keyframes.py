@@ -11,9 +11,14 @@ from .providers import get_provider
 VERSION = "keyframes/v1"  # bump to invalidate every keyframe after a code change
 
 
-def compose_prompt(shot: dict, style: dict) -> str:
-    suffix = style["image_prompt_suffix"].strip()
-    return f"{shot['image_prompt'].strip()}, {suffix}" if suffix else shot["image_prompt"].strip()
+def compose_prompt(shot: dict, sb: dict) -> str:
+    """shot prompt + fixed character descriptions + global style block."""
+    chars = {c["id"]: c["description"].strip() for c in sb.get("characters", [])}
+    parts = [shot["image_prompt"].strip()]
+    parts += [chars[c] for c in shot.get("characters", [])]
+    if sb["style"]["image_prompt_suffix"].strip():
+        parts.append(sb["style"]["image_prompt_suffix"].strip())
+    return ", ".join(parts)
 
 
 def run(ctx: Ctx) -> None:
@@ -26,7 +31,7 @@ def run(ctx: Ctx) -> None:
     for shot in ctx.shots:
         if not ctx.selected(shot["id"]):
             continue
-        prompt = compose_prompt(shot, sb["style"])
+        prompt = compose_prompt(shot, sb)
         ref_rel = shot["reference"].get("image")
         ref = (ctx.root / ref_rel) if ref_rel else None
         inputs = {

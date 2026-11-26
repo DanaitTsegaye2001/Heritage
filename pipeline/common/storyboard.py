@@ -78,6 +78,12 @@ def semantic_checks(sb: dict[str, Any], repo_root: Path) -> list[str]:
         if c not in used:
             warnings.append(f"music cue '{c}' is defined but not used by any shot")
 
+    char_ids = {c["id"] for c in sb.get("characters", [])}
+    for s in shots:
+        for c in s.get("characters", []):
+            if c not in char_ids:
+                errors.append(f"{s['id']}: character '{c}' is not defined in characters")
+
     lead = sb["audio"]["narration_lead_sec"]
     for s in shots:
         ref = s["reference"].get("image")

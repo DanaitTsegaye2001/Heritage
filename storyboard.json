@@ -20,8 +20,8 @@
   },
 
   "models": {
-    "notes": "image + tts use Cloudflare Workers AI (CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN in .env). video: Workers AI has no video model, so shots use Ken Burns. music: stub until Lyria billing or a licensed track (FAILURES.md F-100). `make film-offline` swaps every model to the stub provider. Fill `pricing` from the provider's pricing page; null means cost is logged as null.",
-    "image": { "provider": "cloudflare", "model": "@cf/leonardo/lucid-origin", "params": {}, "input_map": { "negative_prompt": null }, "pricing": { "usd_per_call": null, "usd_per_gpu_second": null, "source": "TODO: Workers AI pricing page", "checked_on": null } },
+    "notes": "image: FLUX.1-schnell via the free HF Space (Cloudflare lucid-origin also wired; its daily allocation ran out, FAILURES F-101). tts: Gemini free tier, 10 requests/day/model (F-103). video: no free hosted image-to-video, so shots use Ken Burns. music: stub until a free score source is wired (F-100). `make film-offline` swaps every model to the stub provider.",
+    "image": { "provider": "hf_space", "model": "black-forest-labs/FLUX.1-schnell", "params": { "api_name": "/infer", "width": 1344, "height": 768, "num_inference_steps": 4 }, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "free public HF Space (anonymous ZeroGPU quota)", "checked_on": "2026-11-26" } },
     "video": { "provider": "stub", "model": "stub/no-video-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } },
     "tts":   { "provider": "gemini", "model": "gemini-3.8-flash-tts", "params": { "style": "Read warmly and unhurried, like a grandchild remembering" }, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "Gemini API free tier (AI Studio)", "checked_on": "2026-11-26" } },
     "music": { "provider": "stub", "model": "stub/chord-pad-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } }
@@ -48,6 +48,11 @@
     "loudness": { "integrated_lufs": -14, "true_peak_db": -1, "lra": 11 }
   },
 
+  "characters": [
+    { "id": "grandmother", "description": "an elderly grandmother in her late seventies with silver braided hair under a white cotton shawl, deep laugh lines, a dark green dress", "notes": "PLACEHOLDER — replace with your real character. Real people need consent first (ETHICS.md)." },
+    { "id": "narrator", "description": "a young woman in her twenties with short natural hair and a mustard sweater", "notes": "PLACEHOLDER" }
+  ],
+
   "music_cues": [
     { "id": "cue_memory",  "prompt": "gentle solo kalimba and soft strings, nostalgic, 70 bpm, no vocals", "seed": 101, "volume_db": -6 },
     { "id": "cue_silence", "prompt": "sparse low cello drone, hushed, almost silent, no percussion",       "seed": 202, "volume_db": -10 },
@@ -62,7 +67,7 @@
       "image_prompt": "extreme close-up of an elderly woman's weathered hands resting on a wooden hand loom, threads in indigo and ochre",
       "motion_prompt": "very slow push-in, fingers twitch slightly, dust motes drift in the light",
       "narration": "My grandmother never wrote anything down. Everything she knew lived in her hands.",
-      "seed": 1001, "music_cue": "cue_memory", "skip_video": false,
+      "seed": 1001, "music_cue": "cue_memory", "characters": ["grandmother"], "skip_video": false,
       "camera": { "zoom_start": 1.0, "zoom_end": 1.15, "pan": "none" },
       "vertical_focus_x": 0.5,
       "reference": { "links": [], "image": null, "licence": null }
@@ -74,7 +79,7 @@
       "image_prompt": "wide shot of a small sunlit room on a Sunday morning, an elderly woman weaving at a wooden loom, a child playing on the floor in the background",
       "motion_prompt": "static camera, the shuttle moves left to right, curtains sway",
       "narration": "On Sunday mornings the house filled with the clack of her loom, steady as a heartbeat.",
-      "seed": 1002, "music_cue": "cue_memory", "skip_video": false,
+      "seed": 1002, "music_cue": "cue_memory", "characters": ["grandmother"], "skip_video": false,
       "camera": { "zoom_start": 1.1, "zoom_end": 1.0, "pan": "right" },
       "vertical_focus_x": 0.4,
       "reference": { "links": [], "image": null, "licence": null }
@@ -98,7 +103,7 @@
       "image_prompt": "a teenage girl on a couch absorbed in her phone, the loom blurred in the foreground, late afternoon light",
       "motion_prompt": "rack focus from loom to girl, she does not look up",
       "narration": "As a kid, I thought it was just thread. I was too busy to sit still.",
-      "seed": 1004, "music_cue": "cue_memory", "skip_video": false,
+      "seed": 1004, "music_cue": "cue_memory", "characters": ["narrator"], "skip_video": false,
       "camera": { "zoom_start": 1.0, "zoom_end": 1.1, "pan": "right" },
       "vertical_focus_x": 0.65,
       "reference": { "links": [], "image": null, "licence": null }
@@ -110,7 +115,7 @@
       "image_prompt": "close-up of elderly trembling hands failing to pass a shuttle through threads, cold blue winter light",
       "motion_prompt": "handheld subtle drift, hands tremble, shuttle slips",
       "narration": "Then her hands began to shake. One winter, the loom went quiet, and the house felt smaller.",
-      "seed": 1005, "music_cue": "cue_silence", "skip_video": false,
+      "seed": 1005, "music_cue": "cue_silence", "characters": ["grandmother"], "skip_video": false,
       "camera": { "zoom_start": 1.15, "zoom_end": 1.25, "pan": "none" },
       "vertical_focus_x": 0.5,
       "reference": { "links": [], "image": null, "licence": null }
@@ -135,7 +140,7 @@
       "image_prompt": "young woman seated at the loom, her elderly grandmother beside her guiding her fingers with her own, warm lamp light",
       "motion_prompt": "slow orbit around the two pairs of hands",
       "narration": "So I asked her to teach me. She couldn't weave anymore, but she could still guide my fingers.",
-      "seed": 1007, "music_cue": "cue_passing", "skip_video": false,
+      "seed": 1007, "music_cue": "cue_passing", "characters": ["narrator", "grandmother"], "skip_video": false,
       "camera": { "zoom_start": 1.05, "zoom_end": 1.2, "pan": "left" },
       "vertical_focus_x": 0.45,
       "reference": { "links": [], "image": null, "licence": null }
@@ -147,7 +152,7 @@
       "image_prompt": "medium shot of a grandmother laughing warmly while her granddaughter frowns at a tangled weave, cozy room",
       "motion_prompt": "gentle push-in, grandmother laughs, granddaughter sighs and smiles",
       "narration": "Over, under, pull. I got it wrong a hundred times. She laughed every single time.",
-      "seed": 1008, "music_cue": "cue_passing", "skip_video": false,
+      "seed": 1008, "music_cue": "cue_passing", "characters": ["grandmother", "narrator"], "skip_video": false,
       "camera": { "zoom_start": 1.0, "zoom_end": 1.1, "pan": "none" },
       "vertical_focus_x": 0.5,
       "reference": { "links": [], "image": null, "licence": null }
@@ -171,7 +176,7 @@
       "image_prompt": "three pairs of hands of different generations, elderly, adult and a small child, resting together on a finished handwoven cloth",
       "motion_prompt": "slow pull-back, the child's fingers trace a star",
       "narration": "Some things can't be written down. They have to be passed from hand to hand.",
-      "seed": 1010, "music_cue": "cue_passing", "skip_video": false,
+      "seed": 1010, "music_cue": "cue_passing", "characters": ["grandmother", "narrator"], "skip_video": false,
       "camera": { "zoom_start": 1.2, "zoom_end": 1.0, "pan": "none" },
       "vertical_focus_x": 0.5,
       "reference": { "links": [], "image": null, "licence": null }
