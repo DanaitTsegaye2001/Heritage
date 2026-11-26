@@ -67,6 +67,14 @@ Entry format:
   With the "unhurried" style, all 10 shots overflowed (9.7–13.2 s of audio against 6.6–8.1 s slots, 1.13–1.66 w/s). At that pace 158 words need ~117 s, which can't fit a 90 s film.
 - Decision: drop the pacing words from the style. Pacing words change speed far more than tone. Keep lines at ≤ 2 w/s × (shot − 0.4 s), or lengthen shots. Follow-up: listen for whether "warmly" alone keeps the tone (pending, TTS quota F-103).
 
+### E-11 — Re-rolling an off-prompt keyframe (s06) ✅ done
+- Date: 2026-11-26 ~21:45 EAT.
+- Hypothesis: Pollinations' first s06 image (two women in yellow dresses instead of hands sharing kolo) ignored the prompt because the prompt began with a generic "close-up of hands…" that the model read as people. A hands-only prompt that says "no faces" plus a new seed fixes it.
+- Change: `shots[s06].image_prompt` rewritten ("top-down close-up of only hands, no faces: …"), seed 1006 → 2006.
+- Measure: visual check; `runs.jsonl` shows only `keyframes:s06` (+ its clip and the final mux) regenerated.
+- Result: second image shows navy-sleeved hands with paper bags on stone steps and no faces. The kolo grains themselves aren't visible. The cache re-rendered only s06's Ken Burns clip, its two normalised clips and the final exports.
+- Decision: keep. Upgrade to FLUX.1-schnell when the HF quota refills.
+
 ### E-07 — Subtitle chunk size
 - Hypothesis: `max_words_per_cue` 5 reads better on 9:16 than 7.
 - Change: [PENDING]
