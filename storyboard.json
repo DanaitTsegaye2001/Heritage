@@ -39,19 +39,18 @@
     "notes": "image: FLUX.1-schnell via the free HF Space (Cloudflare lucid-origin also wired; its daily allocation ran out, FAILURES F-101). tts: Gemini free tier, 10 requests/day/model (F-103). video: no free hosted image-to-video, so shots use Ken Burns. music: stub until a free score source is wired (F-100). `make film-offline` swaps every model to the stub provider.",
     "image": {
       "provider": "hf_space",
-      "model": "multimodalart/FLUX.1-merged",
+      "model": "black-forest-labs/FLUX.1-schnell",
       "params": {
         "api_name": "/infer",
         "width": 1344,
         "height": 768,
-        "guidance_scale": 3.5,
-        "num_inference_steps": 8
+        "num_inference_steps": 4
       },
-      "notes": "Free public Space, no token. FLUX.1-schnell Space hit the anonymous ZeroGPU limit after 3 images; Pollinations was rate-limited and ignored the prompt (FAILURES F-106).",
+      "notes": "Free public Space. Anonymous ZeroGPU quota allowed 3 images (s01–s03); s04–s10 override to local SD-Turbo (FAILURES F-106).",
       "pricing": {
         "usd_per_call": 0,
         "usd_per_gpu_second": null,
-        "source": "free public HF Space",
+        "source": "free public HF Space (anonymous ZeroGPU quota)",
         "checked_on": "2026-11-26"
       }
     },
@@ -79,14 +78,15 @@
       }
     },
     "music": {
-      "provider": "stub",
-      "model": "stub/chord-pad-v1",
+      "provider": "procedural",
+      "model": "procedural/arpeggio-score-v1",
       "params": {},
+      "notes": "Code-composed original score (NOT AI): no free AI music source worked (Lyria quota 0, ACE-Step needs GPU; F-100).",
       "pricing": {
         "usd_per_call": 0,
         "usd_per_gpu_second": null,
-        "source": "local stub",
-        "checked_on": null
+        "source": "local code",
+        "checked_on": "2026-11-26"
       }
     }
   },
@@ -257,6 +257,23 @@
         "links": [],
         "image": null,
         "licence": null
+      },
+      "image_model": {
+        "provider": "local_diffusers",
+        "model": "stabilityai/sd-turbo",
+        "params": {
+          "width": 768,
+          "height": 432,
+          "num_inference_steps": 4,
+          "guidance_scale": 0.0
+        },
+        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "local machine",
+          "checked_on": "2026-11-26"
+        }
       }
     },
     {
@@ -285,6 +302,23 @@
         "links": [],
         "image": null,
         "licence": null
+      },
+      "image_model": {
+        "provider": "local_diffusers",
+        "model": "stabilityai/sd-turbo",
+        "params": {
+          "width": 768,
+          "height": 432,
+          "num_inference_steps": 4,
+          "guidance_scale": 0.0
+        },
+        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "local machine",
+          "checked_on": "2026-11-26"
+        }
       }
     },
     {
@@ -309,6 +343,23 @@
         "links": [],
         "image": null,
         "licence": null
+      },
+      "image_model": {
+        "provider": "local_diffusers",
+        "model": "stabilityai/sd-turbo",
+        "params": {
+          "width": 768,
+          "height": 432,
+          "num_inference_steps": 4,
+          "guidance_scale": 0.0
+        },
+        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "local machine",
+          "checked_on": "2026-11-26"
+        }
       }
     },
     {
@@ -337,6 +388,23 @@
         "links": [],
         "image": null,
         "licence": null
+      },
+      "image_model": {
+        "provider": "local_diffusers",
+        "model": "stabilityai/sd-turbo",
+        "params": {
+          "width": 768,
+          "height": 432,
+          "num_inference_steps": 4,
+          "guidance_scale": 0.0
+        },
+        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "local machine",
+          "checked_on": "2026-11-26"
+        }
       }
     },
     {
@@ -361,6 +429,23 @@
         "links": [],
         "image": null,
         "licence": null
+      },
+      "image_model": {
+        "provider": "local_diffusers",
+        "model": "stabilityai/sd-turbo",
+        "params": {
+          "width": 768,
+          "height": 432,
+          "num_inference_steps": 4,
+          "guidance_scale": 0.0
+        },
+        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "local machine",
+          "checked_on": "2026-11-26"
+        }
       }
     },
     {
@@ -389,6 +474,23 @@
         "links": [],
         "image": null,
         "licence": null
+      },
+      "image_model": {
+        "provider": "local_diffusers",
+        "model": "stabilityai/sd-turbo",
+        "params": {
+          "width": 768,
+          "height": 432,
+          "num_inference_steps": 4,
+          "guidance_scale": 0.0
+        },
+        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "local machine",
+          "checked_on": "2026-11-26"
+        }
       }
     },
     {
@@ -427,13 +529,30 @@
           "source": "Gemini API free tier",
           "checked_on": "2026-11-26"
         }
+      },
+      "image_model": {
+        "provider": "local_diffusers",
+        "model": "stabilityai/sd-turbo",
+        "params": {
+          "width": 768,
+          "height": 432,
+          "num_inference_steps": 4,
+          "guidance_scale": 0.0
+        },
+        "notes": "Open weights on this Mac (M1, MPS): no quota. Used after the HF Space quota ran out (F-106).",
+        "pricing": {
+          "usd_per_call": 0,
+          "usd_per_gpu_second": null,
+          "source": "local machine",
+          "checked_on": "2026-11-26"
+        }
       }
     }
   ],
   "end_card": {
     "duration_sec": 5,
     "title": "Ordinary Freedom",
-    "ai_statement": "This film was made with generative AI. Images, motion, narration voice and music were AI-generated from a written storyboard based on a real school trip.",
+    "ai_statement": "This film was made with generative AI. Images and narration voice were AI-generated from a written storyboard; motion is a pan-and-zoom on the images and the score was composed procedurally in code.",
     "credits": [
       "Story & direction: PLACEHOLDER (your name)",
       "The Heritage Short · 10 Academy"

@@ -23,14 +23,15 @@ def compose_prompt(shot: dict, sb: dict) -> str:
 
 def run(ctx: Ctx) -> None:
     sb = ctx.sb
-    cfg = sb["models"]["image"]
-    provider = get_provider(cfg["provider"])
+    default_cfg = sb["models"]["image"]
     w, h = sb["render"]["keyframe_resolution"]
     out_dir = ctx.stage_dir("keyframes")
 
     for shot in ctx.shots:
         if not ctx.selected(shot["id"]):
             continue
+        cfg = shot.get("image_model") or default_cfg
+        provider = get_provider(cfg["provider"])
         prompt = compose_prompt(shot, sb)
         ref_rel = shot["reference"].get("image")
         ref = (ctx.root / ref_rel) if ref_rel else None
@@ -42,7 +43,7 @@ def run(ctx: Ctx) -> None:
         run_model_cached(
             ctx, stage="keyframes", shot_id=shot["id"], cfg=cfg, inputs=inputs,
             out=out_dir / f"{shot['id']}.png", seed=shot["seed"],
-            call=lambda tmp, shot=shot, prompt=prompt, ref=ref: provider.image(
+            call=lambda tmp, shot=shot, prompt=prompt, ref=ref, cfg=cfg, provider=provider: provider.image(
                 cfg=cfg, prompt=prompt, negative_prompt=sb["style"]["negative_prompt"], seed=shot["seed"],
                 width=w, height=h, reference_image=ref, out=tmp),
         )

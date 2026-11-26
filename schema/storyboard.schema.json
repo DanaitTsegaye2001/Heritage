@@ -203,7 +203,7 @@
       "required": ["provider", "model"],
       "properties": {
         "notes": { "$ref": "#/$defs/notes" },
-        "provider": { "type": "string", "enum": ["stub", "replicate", "macos_say", "cloudflare", "gemini", "hf_space"] },
+        "provider": { "type": "string", "enum": ["stub", "replicate", "macos_say", "cloudflare", "gemini", "hf_space", "local_diffusers", "procedural"] },
         "model": { "type": "string", "minLength": 1, "description": "Provider model ID, e.g. owner/name or owner/name:version for Replicate." },
         "params": { "type": "object", "description": "Extra provider inputs, passed through verbatim and included in the cache hash." },
         "input_map": {
@@ -240,6 +240,7 @@
         "seed": { "$ref": "#/$defs/seed" },
         "music_cue": { "type": ["string", "null"], "pattern": "^cue_[a-z0-9_]+$" },
         "characters": { "type": "array", "items": { "type": "string" }, "maxItems": 4, "uniqueItems": true },
+        "image_model": { "$ref": "#/$defs/model", "description": "Per-shot image model override (e.g. when a free quota runs out mid-film; FAILURES F-106)." },
         "tts_model": { "$ref": "#/$defs/model", "description": "Per-shot TTS override, e.g. when one model's daily quota runs out (FAILURES F-105)." },
         "skip_video": { "type": "boolean", "default": false, "description": "true = never call the video model; render a Ken Burns move from the keyframe." },
         "camera": {
