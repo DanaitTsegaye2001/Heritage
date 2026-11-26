@@ -46,7 +46,14 @@ Entry format:
 
 ## Production runs
 
-### F-100 — [TODO]
+### F-100 — Gemini API: Lyria music has zero free-tier quota; no Veo access
+- When: 2026-11-26, provider probing (direct API call, not a pipeline run).
+- Symptom: `POST models/lyria-3-clip-preview:generateContent` → `HTTP 429 … generate_content_free_tier_input_token_count, limit: 0, model: lyria-3-clip`. The key's model list shows no `veo-*` / `imagen-*` models.
+- Cause: the AI Studio project is on the free tier; Lyria (and Veo) need billing enabled.
+- Workaround: music stays on `stub` until billing is on, or until a licensed track is used. Video uses the Ken Burns fallback. Cloudflare Workers AI covers images (`@cf/leonardo/lucid-origin`) and narration (`@cf/deepgram/aura-2-en`); both verified live (1920×1080 image in 11.9 s; 5.09 s of speech in 4.4 s).
+- Prevention: probe each provider with one call before switching the storyboard to it.
+
+### F-101 — [TODO]
 - When / run_id / stage / shot:
 - Symptom:
 - Cause:
