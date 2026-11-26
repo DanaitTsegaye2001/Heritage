@@ -10,11 +10,15 @@ make film
 → `outputs/final/heritage_16x9.mp4` and `outputs/final/heritage_9x16.mp4`, plus `heritage.srt` and a
 `report.json` holding the **measured** loudness of each export.
 
-Out of the box every model uses the offline **stub** provider, so the command needs no API keys,
-GPU or network. You get placeholder images, a tone standing in for the voice, and a chord pad
-standing in for music. Everything else is the real thing: caching, telemetry, Ken Burns motion,
-ducking, loudness normalisation, subtitles, AI labelling and both exports. Switch providers in
-`storyboard.json → models` when you are ready to generate real media (see [Providers](#providers)).
+`storyboard.json` uses **Cloudflare Workers AI** for keyframes (`@cf/leonardo/lucid-origin`) and
+narration (`@cf/deepgram/aura-2-en`). It needs `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` in `.env`.
+Video uses the Ken Burns fallback because Workers AI has no video model, and music uses the placeholder
+until Lyria billing or a licensed track is set up (FAILURES.md F-100).
+
+**No keys?** Run `make film-offline`. Every model swaps to the free, deterministic **stub** provider
+(placeholder images, a tone for the voice, a chord pad). Everything else still runs for real: caching,
+telemetry, ducking, loudness, subtitles, AI labelling, both exports. Offline and real artifacts have
+different cache keys, so they never mix.
 
 ---
 
@@ -41,11 +45,12 @@ make film                   # creates .venv on first run
 | Command | What it does |
 |---|---|
 | `make film` | validate → script → keyframes → shots → narration → music → assemble |
+| `make film-offline` | same, with stub providers only (no keys, no network, $0) |
 | `make validate` | schema + semantic checks only (also writes `outputs/script/script.md`) |
 | `make keyframes SHOTS=s03` | run one stage, optionally only for some shots (`script`, `keyframes`, `shots`, `narration`, `music`, `assemble`) |
 | `make reroll SHOTS=s03` | ignore the cache for one shot's artifacts, then reassemble |
 | `make costs` | summarise `runs.jsonl`: calls, cache hits, latency, GPU minutes, list-price USD |
-| `make test` | validation tests + end-to-end selective-regeneration test (stub, low-res, ~1–2 min) |
+| `make test` | validation tests + end-to-end selective-regeneration test (always offline/stub, low-res, ~1–2 min) |
 | `make clean-outputs` | delete generated media (keeps `runs.jsonl`) |
 
 Underlying CLI: `.venv/bin/python -m pipeline.run [STAGE ...] [--shots s01,s02] [--force] [--storyboard path]`.
@@ -99,6 +104,7 @@ Set per model in `storyboard.json → models.{image,video,tts,music}`:
 
 | provider | image | video | tts | music | cost | status |
 |---|---|---|---|---|---|---|
+| `cloudflare` | ✓ (`lucid-origin`, up to 2500 px, seeded) | — | ✓ (`aura-2-en`, 40 speakers) | — | Workers AI pricing; GPU time not reported | **verified live** |
 | `stub` | placeholder | — (forces Ken Burns) | tone | chord pad | $0 | tested |
 | `macos_say` | — | — | real speech | — | $0 | tested on macOS |
 | `replicate` | ✓ | ✓ | ✓ | ✓ | per model | **written against the documented API, not yet run live in this repo** |
@@ -114,6 +120,10 @@ Replicate example (look up the model ID and its input names on its model page fi
   "pricing": { "usd_per_call": null, "usd_per_gpu_second": null, "source": "<pricing URL>", "checked_on": "YYYY-MM-DD" }
 }
 ```
+
+Gemini API (`GEMINI_API_KEY`) has Lyria music models, but this project's free tier allows 0 requests,
+and its key has no access to Veo video models (FAILURES.md F-100). There's no adapter yet; once billing is on,
+adding one is the next step for music.
 
 Put `REPLICATE_API_TOKEN` in `.env`. Make one cheap call first (`make keyframes SHOTS=s01`) and record
 the result in EXPERIMENTS.md / FAILURES.md before a full run.

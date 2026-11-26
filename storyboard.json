@@ -20,10 +20,10 @@
   },
 
   "models": {
-    "notes": "provider 'stub' = deterministic local placeholders ($0, no GPU). See README §Providers to switch to 'replicate' (needs REPLICATE_API_TOKEN in .env) or 'macos_say' (local speech on macOS). Fill `pricing` from the provider's pricing page; null means cost is logged as null.",
-    "image": { "provider": "stub", "model": "stub/placeholder-image-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } },
+    "notes": "image + tts use Cloudflare Workers AI (CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN in .env). video: Workers AI has no video model, so shots use Ken Burns. music: stub until Lyria billing or a licensed track (FAILURES.md F-100). `make film-offline` swaps every model to the stub provider. Fill `pricing` from the provider's pricing page; null means cost is logged as null.",
+    "image": { "provider": "cloudflare", "model": "@cf/leonardo/lucid-origin", "params": {}, "input_map": { "negative_prompt": null }, "pricing": { "usd_per_call": null, "usd_per_gpu_second": null, "source": "TODO: Workers AI pricing page", "checked_on": null } },
     "video": { "provider": "stub", "model": "stub/no-video-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } },
-    "tts":   { "provider": "stub", "model": "stub/tone-voice-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } },
+    "tts":   { "provider": "cloudflare", "model": "@cf/deepgram/aura-2-en", "params": {}, "input_map": { "speed": null, "seed": null }, "pricing": { "usd_per_call": null, "usd_per_gpu_second": null, "source": "TODO: Workers AI pricing page", "checked_on": null } },
     "music": { "provider": "stub", "model": "stub/chord-pad-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } }
   },
 
@@ -34,8 +34,8 @@
   },
 
   "voice": {
-    "notes": "voice_id is provider-specific. For macos_say use a system voice name such as 'Samantha'.",
-    "voice_id": "narrator_warm_placeholder",
+    "notes": "voice_id is provider-specific. Cloudflare aura-2-en speakers include luna, athena, asteria, helena, orion, … (see the model schema). For macos_say use a system voice such as 'Samantha'.",
+    "voice_id": "luna",
     "speed": 1.0,
     "seed": 7
   },
