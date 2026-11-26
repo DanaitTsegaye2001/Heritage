@@ -35,10 +35,12 @@ class HFSpaceProvider(Provider):
         space = p.get("space", cfg["model"])
         try:
             client = Client(space, token=os.environ.get("HF_TOKEN") or None, verbose=False)
+            # Any extra params (guidance_scale, num_inference_steps, …) pass straight to the Space.
+            extra = {k: v for k, v in p.items() if k not in ("space", "api_name", "width", "height")}
             path, used_seed = client.predict(
                 prompt=prompt, seed=seed, randomize_seed=False,
                 width=p.get("width", 1344), height=p.get("height", 768),
-                num_inference_steps=p.get("num_inference_steps", 4), api_name=p.get("api_name", "/infer"))
+                api_name=p.get("api_name", "/infer"), **extra)
         except (TypeError, AttributeError, ImportError) as e:  # our bug / API change: retrying won't help
             raise PermanentError(f"{type(e).__name__}: {e}") from e
         except Exception as e:  # gradio AppError, httpx/network errors, queue timeouts

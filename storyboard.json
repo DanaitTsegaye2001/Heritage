@@ -39,17 +39,19 @@
     "notes": "image: FLUX.1-schnell via the free HF Space (Cloudflare lucid-origin also wired; its daily allocation ran out, FAILURES F-101). tts: Gemini free tier, 10 requests/day/model (F-103). video: no free hosted image-to-video, so shots use Ken Burns. music: stub until a free score source is wired (F-100). `make film-offline` swaps every model to the stub provider.",
     "image": {
       "provider": "hf_space",
-      "model": "black-forest-labs/FLUX.1-schnell",
+      "model": "multimodalart/FLUX.1-merged",
       "params": {
         "api_name": "/infer",
         "width": 1344,
         "height": 768,
-        "num_inference_steps": 4
+        "guidance_scale": 3.5,
+        "num_inference_steps": 8
       },
+      "notes": "Free public Space, no token. FLUX.1-schnell Space hit the anonymous ZeroGPU limit after 3 images; Pollinations was rate-limited and ignored the prompt (FAILURES F-106).",
       "pricing": {
         "usd_per_call": 0,
         "usd_per_gpu_second": null,
-        "source": "free public HF Space (anonymous ZeroGPU quota)",
+        "source": "free public HF Space",
         "checked_on": "2026-11-26"
       }
     },
