@@ -287,20 +287,19 @@
         "licence": null
       },
       "image_model": {
-        "provider": "hf_space",
-        "model": "multimodalart/FLUX.1-merged",
+        "provider": "pollinations",
+        "model": "flux",
         "params": {
-          "api_name": "/infer",
           "width": 1344,
           "height": 768,
-          "guidance_scale": 3.5,
-          "num_inference_steps": 8
+          "crop_bottom_frac": 0.08
         },
-        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
+        "max_attempts": 8,
+        "notes": "Keyless last resort while the HF ZeroGPU quota refills (F-106). Watermark strip cropped. Upgrade with an HF FLUX reroll when quota allows.",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "free public HF Space",
+          "source": "free public endpoint",
           "checked_on": "2026-11-26"
         }
       }
@@ -329,20 +328,19 @@
         "licence": null
       },
       "image_model": {
-        "provider": "hf_space",
-        "model": "multimodalart/FLUX.1-merged",
+        "provider": "pollinations",
+        "model": "flux",
         "params": {
-          "api_name": "/infer",
           "width": 1344,
           "height": 768,
-          "guidance_scale": 3.5,
-          "num_inference_steps": 8
+          "crop_bottom_frac": 0.08
         },
-        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
+        "max_attempts": 8,
+        "notes": "Keyless last resort while the HF ZeroGPU quota refills (F-106). Watermark strip cropped. Upgrade with an HF FLUX reroll when quota allows.",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "free public HF Space",
+          "source": "free public endpoint",
           "checked_on": "2026-11-26"
         }
       }
@@ -375,20 +373,19 @@
         "licence": null
       },
       "image_model": {
-        "provider": "hf_space",
-        "model": "multimodalart/FLUX.1-merged",
+        "provider": "pollinations",
+        "model": "flux",
         "params": {
-          "api_name": "/infer",
           "width": 1344,
           "height": 768,
-          "guidance_scale": 3.5,
-          "num_inference_steps": 8
+          "crop_bottom_frac": 0.08
         },
-        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
+        "max_attempts": 8,
+        "notes": "Keyless last resort while the HF ZeroGPU quota refills (F-106). Watermark strip cropped. Upgrade with an HF FLUX reroll when quota allows.",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "free public HF Space",
+          "source": "free public endpoint",
           "checked_on": "2026-11-26"
         }
       }
@@ -417,20 +414,19 @@
         "licence": null
       },
       "image_model": {
-        "provider": "hf_space",
-        "model": "multimodalart/FLUX.1-merged",
+        "provider": "pollinations",
+        "model": "flux",
         "params": {
-          "api_name": "/infer",
           "width": 1344,
           "height": 768,
-          "guidance_scale": 3.5,
-          "num_inference_steps": 8
+          "crop_bottom_frac": 0.08
         },
-        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
+        "max_attempts": 8,
+        "notes": "Keyless last resort while the HF ZeroGPU quota refills (F-106). Watermark strip cropped. Upgrade with an HF FLUX reroll when quota allows.",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "free public HF Space",
+          "source": "free public endpoint",
           "checked_on": "2026-11-26"
         }
       }
@@ -463,20 +459,19 @@
         "licence": null
       },
       "image_model": {
-        "provider": "hf_space",
-        "model": "multimodalart/FLUX.1-merged",
+        "provider": "pollinations",
+        "model": "flux",
         "params": {
-          "api_name": "/infer",
           "width": 1344,
           "height": 768,
-          "guidance_scale": 3.5,
-          "num_inference_steps": 8
+          "crop_bottom_frac": 0.08
         },
-        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
+        "max_attempts": 8,
+        "notes": "Keyless last resort while the HF ZeroGPU quota refills (F-106). Watermark strip cropped. Upgrade with an HF FLUX reroll when quota allows.",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "free public HF Space",
+          "source": "free public endpoint",
           "checked_on": "2026-11-26"
         }
       }
@@ -519,20 +514,19 @@
         }
       },
       "image_model": {
-        "provider": "hf_space",
-        "model": "multimodalart/FLUX.1-merged",
+        "provider": "pollinations",
+        "model": "flux",
         "params": {
-          "api_name": "/infer",
           "width": 1344,
           "height": 768,
-          "guidance_scale": 3.5,
-          "num_inference_steps": 8
+          "crop_bottom_frac": 0.08
         },
-        "notes": "FLUX.1 merged (dev+schnell) Space, used when the schnell Space's ZeroGPU quota ran out (F-106).",
+        "max_attempts": 8,
+        "notes": "Keyless last resort while the HF ZeroGPU quota refills (F-106). Watermark strip cropped. Upgrade with an HF FLUX reroll when quota allows.",
         "pricing": {
           "usd_per_call": 0,
           "usd_per_gpu_second": null,
-          "source": "free public HF Space",
+          "source": "free public endpoint",
           "checked_on": "2026-11-26"
         }
       }

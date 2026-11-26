@@ -5,6 +5,7 @@ from .cloudflare import CloudflareProvider
 from .gemini import GeminiProvider
 from .hf_space import HFSpaceProvider
 from .local_diffusers import LocalDiffusersProvider
+from .pollinations import PollinationsProvider
 from .procedural import ProceduralProvider
 from .macos_say import MacOSSayProvider
 from .replicate import ReplicateProvider
@@ -19,6 +20,7 @@ _REGISTRY: dict[str, type[Provider]] = {
     "hf_space": HFSpaceProvider,
     "local_diffusers": LocalDiffusersProvider,
     "procedural": ProceduralProvider,
+    "pollinations": PollinationsProvider,
 }
 
 
