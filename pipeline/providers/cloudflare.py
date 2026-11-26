@@ -49,6 +49,8 @@ def _run(cfg: dict, standard: dict[str, Any]) -> tuple[bytes, str]:
             return resp.read(), resp.headers.get("Content-Type", "")
     except urllib.error.HTTPError as e:
         detail = e.read().decode(errors="replace")[:300]
+        if e.code == 429 and ("daily free allocation" in detail or '"code":4006' in detail.replace(" ", "")):
+            raise PermanentError(f"daily free allocation used up (resets 00:00 UTC): {detail}") from e
         if e.code in (408, 429) or e.code >= 500:
             raise TransientError(f"HTTP {e.code}: {detail}") from e
         raise PermanentError(f"HTTP {e.code}: {detail}") from e

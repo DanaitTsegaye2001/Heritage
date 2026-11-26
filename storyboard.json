@@ -23,7 +23,7 @@
     "notes": "image + tts use Cloudflare Workers AI (CLOUDFLARE_ACCOUNT_ID / CLOUDFLARE_API_TOKEN in .env). video: Workers AI has no video model, so shots use Ken Burns. music: stub until Lyria billing or a licensed track (FAILURES.md F-100). `make film-offline` swaps every model to the stub provider. Fill `pricing` from the provider's pricing page; null means cost is logged as null.",
     "image": { "provider": "cloudflare", "model": "@cf/leonardo/lucid-origin", "params": {}, "input_map": { "negative_prompt": null }, "pricing": { "usd_per_call": null, "usd_per_gpu_second": null, "source": "TODO: Workers AI pricing page", "checked_on": null } },
     "video": { "provider": "stub", "model": "stub/no-video-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } },
-    "tts":   { "provider": "cloudflare", "model": "@cf/deepgram/aura-2-en", "params": {}, "input_map": { "speed": null, "seed": null }, "pricing": { "usd_per_call": null, "usd_per_gpu_second": null, "source": "TODO: Workers AI pricing page", "checked_on": null } },
+    "tts":   { "provider": "gemini", "model": "gemini-3.8-flash-tts", "params": { "style": "Read warmly and unhurried, like a grandchild remembering" }, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "Gemini API free tier (AI Studio)", "checked_on": "2026-11-26" } },
     "music": { "provider": "stub", "model": "stub/chord-pad-v1", "params": {}, "pricing": { "usd_per_call": 0, "usd_per_gpu_second": null, "source": "local stub", "checked_on": null } }
   },
 
@@ -34,8 +34,8 @@
   },
 
   "voice": {
-    "notes": "voice_id is provider-specific. Cloudflare aura-2-en speakers include luna, athena, asteria, helena, orion, … (see the model schema). For macos_say use a system voice such as 'Samantha'.",
-    "voice_id": "luna",
+    "notes": "voice_id is provider-specific. Gemini TTS prebuilt voices include Kore, Puck, Charon, Aoede, Leda, … (style instruction lives in models.tts.params.style). Cloudflare aura-2-en uses names like luna/athena. For macos_say use a system voice such as 'Samantha'.",
+    "voice_id": "Kore",
     "speed": 1.0,
     "seed": 7
   },
@@ -44,7 +44,7 @@
     "narration_lead_sec": 0.4,
     "music_fade_in_sec": 1.0,
     "music_fade_out_sec": 2.0,
-    "ducking": { "threshold": 0.02, "ratio": 8, "attack_ms": 20, "release_ms": 400 },
+    "ducking": { "threshold": 0.02, "ratio": 6, "attack_ms": 300, "release_ms": 1500 },
     "loudness": { "integrated_lufs": -14, "true_peak_db": -1, "lra": 11 }
   },
 
